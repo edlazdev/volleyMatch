@@ -60,7 +60,7 @@ export function PlayerForm({ disabled, onSubmit }: PlayerFormProps) {
           <Select disabled={disabled} {...register('level', { required: true })}>
             {LEVELS.map((lvl) => (
               <option key={lvl.value} value={lvl.value} title={lvl.label}>
-                {lvl.value} {chicks(lvl.value)}
+                {chicks(lvl.value)}
               </option>
             ))}
           </Select>

@@ -52,7 +52,7 @@ export function PlayerList({
             >
               {LEVELS.map((lvl) => (
                 <option key={lvl.value} value={lvl.value} title={lvl.label}>
-                  {lvl.value} {chicks(lvl.value)}
+                  {chicks(lvl.value)}
                 </option>
               ))}
             </Select>

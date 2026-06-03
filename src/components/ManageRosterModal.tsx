@@ -85,7 +85,7 @@ export function ManageRosterModal({ open, onClose }: ManageRosterModalProps) {
             >
               {LEVELS.map((l) => (
                 <option key={l.value} value={l.value} title={l.label}>
-                  {l.value} {chicks(l.value)}
+                  {chicks(l.value)}
                 </option>
               ))}
             </Select>

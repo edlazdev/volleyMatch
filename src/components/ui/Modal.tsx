@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import type { ReactNode } from 'react';
 import { X } from 'lucide-react';
 
@@ -27,7 +28,10 @@ export function Modal({ open, title, onClose, children, footer }: ModalProps) {
 
   if (!open) return null;
 
-  return (
+  // Portal a <body> para evitar que un `transform` heredado (p. ej. de las
+  // animaciones de la página) cree un contexto de posicionamiento y descentre
+  // el modal fijo.
+  return createPortal(
     <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center">
       <div
         className="absolute inset-0 bg-slate-900/50 backdrop-blur-sm"
@@ -61,6 +65,7 @@ export function Modal({ open, title, onClose, children, footer }: ModalProps) {
           </div>
         )}
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
