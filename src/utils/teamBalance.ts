@@ -9,8 +9,10 @@ import { createId } from './id';
 
 /**
  * Agrupa jugadores por nivel.
- * Devuelve un mapa nivel -> jugadores, ordenado de mayor a menor nivel
- * para que la distribución arranque por los jugadores más fuertes.
+ * Devuelve un mapa nivel -> jugadores. La escala es invertida:
+ * 1 = Competitivo (más fuerte) … 6 = Principiante. Por eso ordenamos de
+ * menor a mayor número, de modo que la distribución arranque por los
+ * jugadores más fuertes.
  */
 export function groupPlayersByLevel(
   players: Player[],
@@ -26,9 +28,9 @@ export function groupPlayersByLevel(
     }
   }
 
-  // Ordenamos las claves de mayor a menor nivel.
+  // Menor número = mayor nivel: ordenamos ascendente (los más fuertes primero).
   return new Map(
-    [...groups.entries()].sort(([a], [b]) => b - a),
+    [...groups.entries()].sort(([a], [b]) => a - b),
   );
 }
 

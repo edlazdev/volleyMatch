@@ -65,11 +65,13 @@ src/
 
 ## 📊 Niveles
 
+> Escala invertida: **1 es el nivel más alto** y 6 el más bajo.
+
 | Nivel | Descripción      |
 | ----- | ---------------- |
-| 1     | Principiante     |
-| 2     | Básico           |
-| 3     | Intermedio       |
-| 4     | Intermedio Alto  |
-| 5     | Avanzado         |
-| 6     | Competitivo      |
+| 1     | Competitivo      |
+| 2     | Avanzado         |
+| 3     | Intermedio Alto  |
+| 4     | Intermedio       |
+| 5     | Básico           |
+| 6     | Principiante     |

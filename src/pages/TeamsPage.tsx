@@ -27,12 +27,12 @@ export function TeamsPage() {
     [teams],
   );
 
-  // Marcamos el equipo más fuerte y el más débil por nivel total.
+  // Escala invertida: menor nivel total = equipo más fuerte.
   const { strongId, weakId } = useMemo(() => {
     const entries = [...metricsByTeam.values()];
     if (entries.length < 2) return { strongId: null, weakId: null };
     const sorted = [...entries].sort(
-      (a, b) => b.teamTotalLevel - a.teamTotalLevel,
+      (a, b) => a.teamTotalLevel - b.teamTotalLevel,
     );
     const top = sorted[0];
     const bottom = sorted[sorted.length - 1];

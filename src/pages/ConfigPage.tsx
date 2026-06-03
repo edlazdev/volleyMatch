@@ -17,6 +17,7 @@ import { SegmentedControl } from '@/components/ui/SegmentedControl';
 import { ProgressBar } from '@/components/ui/ProgressBar';
 import { PlayerForm } from '@/components/PlayerForm';
 import { PlayerList } from '@/components/PlayerList';
+import { LevelCounts } from '@/components/LevelCounts';
 import { ImportPlayersModal } from '@/components/ImportPlayersModal';
 
 export function ConfigPage() {
@@ -158,6 +159,16 @@ export function ConfigPage() {
             </button>
           )}
         </div>
+
+        {players.length > 0 && (
+          <div className="mb-4">
+            <p className="mb-2 text-xs font-semibold text-slate-500 dark:text-slate-400">
+              Distribución por nivel
+            </p>
+            <LevelCounts players={players} />
+          </div>
+        )}
+
         <PlayerList
           players={players}
           onRemove={removePlayer}
