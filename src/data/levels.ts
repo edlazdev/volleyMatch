@@ -73,3 +73,26 @@ export const CHICK = '🐤';
 export function chicks(level: PlayerLevel): string {
   return CHICK.repeat(level);
 }
+
+/**
+ * Clases para el dropdown de nivel teñido con el color propio del nivel.
+ * (Cadenas literales para que Tailwind las incluya en el build.)
+ */
+export const LEVEL_SELECT_CLASS: Record<PlayerLevel, string> = {
+  1: 'border-rose-200 bg-rose-50 text-rose-800 dark:border-rose-900 dark:bg-rose-950/40 dark:text-rose-200',
+  2: 'border-orange-200 bg-orange-50 text-orange-800 dark:border-orange-900 dark:bg-orange-950/40 dark:text-orange-200',
+  3: 'border-amber-200 bg-amber-50 text-amber-800 dark:border-amber-900 dark:bg-amber-950/40 dark:text-amber-200',
+  4: 'border-teal-200 bg-teal-50 text-teal-800 dark:border-teal-900 dark:bg-teal-950/40 dark:text-teal-200',
+  5: 'border-sky-200 bg-sky-50 text-sky-800 dark:border-sky-900 dark:bg-sky-950/40 dark:text-sky-200',
+  6: 'border-slate-300 bg-slate-50 text-slate-700 dark:border-slate-700 dark:bg-slate-800/60 dark:text-slate-200',
+};
+
+/** Clases para la tarjeta de filtro seleccionada con el color propio del nivel. */
+export const LEVEL_ACTIVE_CARD_CLASS: Record<PlayerLevel, string> = {
+  1: 'border-rose-400 bg-rose-50 ring-2 ring-rose-400/30 dark:border-rose-600 dark:bg-rose-950/40',
+  2: 'border-orange-400 bg-orange-50 ring-2 ring-orange-400/30 dark:border-orange-600 dark:bg-orange-950/40',
+  3: 'border-amber-400 bg-amber-50 ring-2 ring-amber-400/30 dark:border-amber-600 dark:bg-amber-950/40',
+  4: 'border-teal-400 bg-teal-50 ring-2 ring-teal-400/30 dark:border-teal-600 dark:bg-teal-950/40',
+  5: 'border-sky-400 bg-sky-50 ring-2 ring-sky-400/30 dark:border-sky-600 dark:bg-sky-950/40',
+  6: 'border-slate-400 bg-slate-100 ring-2 ring-slate-400/30 dark:border-slate-500 dark:bg-slate-800/60',
+};

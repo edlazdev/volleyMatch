@@ -1,6 +1,6 @@
 import { Trash2, Users } from 'lucide-react';
 import type { Player, PlayerLevel } from '@/types';
-import { LEVELS, chicks, getLevel } from '@/data/levels';
+import { LEVELS, LEVEL_SELECT_CLASS, chicks, getLevel } from '@/data/levels';
 import { Select } from '@/components/ui/Select';
 import { EmptyState } from '@/components/ui/EmptyState';
 
@@ -47,7 +47,8 @@ export function PlayerList({
                 onChangeLevel(player.id, Number(e.target.value) as PlayerLevel)
               }
               title={getLevel(player.level).label}
-              className="h-9 text-xs"
+              accentClass={LEVEL_SELECT_CLASS[player.level]}
+              className="h-9 text-xs font-semibold"
             >
               {LEVELS.map((lvl) => (
                 <option key={lvl.value} value={lvl.value} title={lvl.label}>
