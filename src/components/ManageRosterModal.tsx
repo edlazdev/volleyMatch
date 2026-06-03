@@ -23,16 +23,18 @@ export function ManageRosterModal({ open, onClose }: ManageRosterModalProps) {
   const updateDefaultEntry = useVolleyStore((s) => s.updateDefaultEntry);
   const removeFromDefault = useVolleyStore((s) => s.removeFromDefault);
   const resetDefaultToFactory = useVolleyStore((s) => s.resetDefaultToFactory);
+  const clearDefault = useVolleyStore((s) => s.clearDefault);
 
   const [name, setName] = useState('');
   const [level, setLevel] = useState<PlayerLevel>(3);
 
-  // Al abrir por primera vez sin lista guardada, sembramos la de fábrica.
+  // Sembramos la lista de fábrica solo al abrir (no al vaciarla manualmente),
+  // por eso leemos el estado puntual en vez de depender de su longitud.
   useEffect(() => {
-    if (open && defaultRoster.length === 0) {
+    if (open && useVolleyStore.getState().defaultRoster.length === 0) {
       setDefaultRoster(SAMPLE_ROSTER);
     }
-  }, [open, defaultRoster.length, setDefaultRoster]);
+  }, [open, setDefaultRoster]);
 
   const handleAdd = () => {
     const trimmed = name.trim();
@@ -95,6 +97,23 @@ export function ManageRosterModal({ open, onClose }: ManageRosterModalProps) {
           </Button>
         </div>
 
+        {/* Cabecera del listado con borrado masivo */}
+        {defaultRoster.length > 0 && (
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
+              {defaultRoster.length}{' '}
+              {defaultRoster.length === 1 ? 'persona' : 'personas'}
+            </span>
+            <button
+              onClick={clearDefault}
+              className="inline-flex items-center gap-1 text-xs font-semibold text-rose-500 hover:text-rose-600"
+            >
+              <Trash2 className="h-3.5 w-3.5" />
+              Vaciar todo
+            </button>
+          </div>
+        )}
+
         {/* Listado editable */}
         {defaultRoster.length === 0 ? (
           <EmptyState
@@ -129,8 +148,8 @@ export function ManageRosterModal({ open, onClose }: ManageRosterModalProps) {
                     className="h-9 text-xs"
                   >
                     {LEVELS.map((l) => (
-                      <option key={l.value} value={l.value}>
-                        {l.value} · {l.label}
+                      <option key={l.value} value={l.value} title={l.label}>
+                        {chicks(l.value)}
                       </option>
                     ))}
                   </Select>
