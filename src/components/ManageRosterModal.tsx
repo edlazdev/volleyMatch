@@ -85,7 +85,7 @@ export function ManageRosterModal({ open, onClose }: ManageRosterModalProps) {
             maxLength={40}
             className="flex-1"
           />
-          <div className="w-28 shrink-0">
+          <div className="w-40 shrink-0">
             <Select
               value={level}
               onChange={(e) => setLevel(Number(e.target.value) as PlayerLevel)}
@@ -167,7 +167,7 @@ export function ManageRosterModal({ open, onClose }: ManageRosterModalProps) {
                   maxLength={40}
                   className="h-9 flex-1"
                 />
-                <div className="w-28 shrink-0">
+                <div className="w-36 shrink-0">
                   <Select
                     value={entry.level}
                     onChange={(e) =>

@@ -4,13 +4,41 @@
 
 @layer base {
   :root {
-    color-scheme: light dark;
+    color-scheme: light;
+  }
+  .dark {
+    color-scheme: dark;
   }
 
   html,
   body,
   #root {
     height: 100%;
+  }
+
+  /* Scrollbars: pista transparente (sin fondo negro/gris), pulgar sutil. */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(148 163 184 / 0.45) transparent;
+  }
+  *::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  *::-webkit-scrollbar-thumb {
+    background-color: rgb(148 163 184 / 0.45);
+    border-radius: 9999px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+  *::-webkit-scrollbar-thumb:hover {
+    background-color: rgb(100 116 139 / 0.6);
+  }
+  *::-webkit-scrollbar-corner {
+    background: transparent;
   }
 
   body {

@@ -1,6 +1,11 @@
 import { useMemo } from 'react';
 import type { Player, PlayerLevel } from '@/types';
-import { LEVELS, LEVEL_ACTIVE_CARD_CLASS, chicks } from '@/data/levels';
+import {
+  LEVELS,
+  LEVEL_ACTIVE_CARD_CLASS,
+  LEVEL_SOFT_CARD_CLASS,
+  chicks,
+} from '@/data/levels';
 import { cn } from '@/utils/cn';
 
 interface LevelCountsProps {
@@ -46,8 +51,8 @@ export function LevelCounts({ players, selected, onSelect }: LevelCountsProps) {
               active
                 ? LEVEL_ACTIVE_CARD_CLASS[lvl.value]
                 : empty
-                  ? 'border-slate-200 bg-slate-50 opacity-60 dark:border-slate-800 dark:bg-slate-900'
-                  : 'border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900',
+                  ? 'border-slate-200 bg-slate-50 opacity-50 dark:border-slate-800 dark:bg-slate-900'
+                  : LEVEL_SOFT_CARD_CLASS[lvl.value],
             )}
             title={
               interactive

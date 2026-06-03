@@ -40,7 +40,7 @@ export function PlayerList({
             {player.name}
           </span>
 
-          <div className="w-28 shrink-0">
+          <div className="w-40 shrink-0">
             <Select
               value={player.level}
               onChange={(e) =>

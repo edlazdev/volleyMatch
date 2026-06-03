@@ -87,12 +87,22 @@ export const LEVEL_SELECT_CLASS: Record<PlayerLevel, string> = {
   6: 'border-slate-300 bg-slate-50 text-slate-700 dark:border-slate-700 dark:bg-slate-800/60 dark:text-slate-200',
 };
 
-/** Clases para la tarjeta de filtro seleccionada con el color propio del nivel. */
+/** Tarjeta de nivel en reposo: tinte suave del color propio (nunca blanca). */
+export const LEVEL_SOFT_CARD_CLASS: Record<PlayerLevel, string> = {
+  1: 'border-rose-200 bg-rose-50 dark:border-rose-900/60 dark:bg-rose-950/20',
+  2: 'border-orange-200 bg-orange-50 dark:border-orange-900/60 dark:bg-orange-950/20',
+  3: 'border-amber-200 bg-amber-50 dark:border-amber-900/60 dark:bg-amber-950/20',
+  4: 'border-teal-200 bg-teal-50 dark:border-teal-900/60 dark:bg-teal-950/20',
+  5: 'border-sky-200 bg-sky-50 dark:border-sky-900/60 dark:bg-sky-950/20',
+  6: 'border-slate-300 bg-slate-100 dark:border-slate-700 dark:bg-slate-800/40',
+};
+
+/** Tarjeta de filtro seleccionada: color propio del nivel, más intenso + anillo. */
 export const LEVEL_ACTIVE_CARD_CLASS: Record<PlayerLevel, string> = {
-  1: 'border-rose-400 bg-rose-50 ring-2 ring-rose-400/30 dark:border-rose-600 dark:bg-rose-950/40',
-  2: 'border-orange-400 bg-orange-50 ring-2 ring-orange-400/30 dark:border-orange-600 dark:bg-orange-950/40',
-  3: 'border-amber-400 bg-amber-50 ring-2 ring-amber-400/30 dark:border-amber-600 dark:bg-amber-950/40',
-  4: 'border-teal-400 bg-teal-50 ring-2 ring-teal-400/30 dark:border-teal-600 dark:bg-teal-950/40',
-  5: 'border-sky-400 bg-sky-50 ring-2 ring-sky-400/30 dark:border-sky-600 dark:bg-sky-950/40',
-  6: 'border-slate-400 bg-slate-100 ring-2 ring-slate-400/30 dark:border-slate-500 dark:bg-slate-800/60',
+  1: 'border-rose-400 bg-rose-100 ring-2 ring-rose-400/40 dark:border-rose-500 dark:bg-rose-950/50',
+  2: 'border-orange-400 bg-orange-100 ring-2 ring-orange-400/40 dark:border-orange-500 dark:bg-orange-950/50',
+  3: 'border-amber-400 bg-amber-100 ring-2 ring-amber-400/40 dark:border-amber-500 dark:bg-amber-950/50',
+  4: 'border-teal-400 bg-teal-100 ring-2 ring-teal-400/40 dark:border-teal-500 dark:bg-teal-950/50',
+  5: 'border-sky-400 bg-sky-100 ring-2 ring-sky-400/40 dark:border-sky-500 dark:bg-sky-950/50',
+  6: 'border-slate-400 bg-slate-200 ring-2 ring-slate-400/40 dark:border-slate-500 dark:bg-slate-800/70',
 };
