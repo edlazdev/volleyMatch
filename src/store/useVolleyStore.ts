@@ -52,6 +52,16 @@ interface VolleyState {
   loadDefault: () => void;
   /** Elimina la lista predeterminada guardada. */
   clearDefault: () => void;
+  /** Reemplaza por completo la lista predeterminada. */
+  setDefaultRoster: (entries: RosterEntry[]) => void;
+  /** Agrega una persona a la lista predeterminada. */
+  addToDefault: (name: string, level: PlayerLevel) => void;
+  /** Edita una entrada de la lista predeterminada por índice. */
+  updateDefaultEntry: (index: number, patch: Partial<RosterEntry>) => void;
+  /** Quita una persona de la lista predeterminada por índice. */
+  removeFromDefault: (index: number) => void;
+  /** Restaura la lista predeterminada a la de fábrica. */
+  resetDefaultToFactory: () => void;
 
   // --- Generación ---
   generateTeams: () => void;
@@ -166,6 +176,42 @@ export const useVolleyStore = create<VolleyState>()(
       },
 
       clearDefault: () => set({ defaultRoster: [] }),
+
+      setDefaultRoster: (entries) =>
+        set({
+          defaultRoster: entries.map((e) => ({
+            name: e.name.trim(),
+            level: e.level,
+          })),
+        }),
+
+      addToDefault: (name, level) => {
+        const trimmed = name.trim();
+        if (!trimmed) return;
+        set((state) => ({
+          defaultRoster: [
+            ...state.defaultRoster,
+            { name: trimmed.slice(0, 40), level },
+          ],
+        }));
+      },
+
+      updateDefaultEntry: (index, patch) =>
+        set((state) => ({
+          defaultRoster: state.defaultRoster.map((entry, i) =>
+            i === index ? { ...entry, ...patch } : entry,
+          ),
+        })),
+
+      removeFromDefault: (index) =>
+        set((state) => ({
+          defaultRoster: state.defaultRoster.filter((_, i) => i !== index),
+        })),
+
+      resetDefaultToFactory: () =>
+        set({
+          defaultRoster: SAMPLE_ROSTER.map((e) => ({ ...e })),
+        }),
 
       updatePlayer: (id, patch) =>
         set((state) => ({

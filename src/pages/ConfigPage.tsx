@@ -4,6 +4,7 @@ import {
   BookmarkPlus,
   CheckCircle2,
   ClipboardList,
+  ListPlus,
   Sparkles,
   Trash2,
   UserCheck,
@@ -22,6 +23,7 @@ import { PlayerList } from '@/components/PlayerList';
 import { LevelCounts } from '@/components/LevelCounts';
 import { ImportPlayersModal } from '@/components/ImportPlayersModal';
 import { SelectParticipantsModal } from '@/components/SelectParticipantsModal';
+import { ManageRosterModal } from '@/components/ManageRosterModal';
 
 export function ConfigPage() {
   const teamCount = useVolleyStore((s) => s.teamCount);
@@ -40,6 +42,7 @@ export function ConfigPage() {
   const { players, validation } = useTeamData();
   const [importOpen, setImportOpen] = useState(false);
   const [selectOpen, setSelectOpen] = useState(false);
+  const [manageOpen, setManageOpen] = useState(false);
   const [savedHint, setSavedHint] = useState(false);
   const [levelFilter, setLevelFilter] = useState<PlayerLevel | null>(null);
 
@@ -108,6 +111,14 @@ export function ConfigPage() {
           <Button size="sm" onClick={() => setSelectOpen(true)}>
             <UserCheck className="h-4 w-4" />
             Elegir participantes
+          </Button>
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={() => setManageOpen(true)}
+          >
+            <ListPlus className="h-4 w-4" />
+            Editar lista
           </Button>
           <Button
             variant="secondary"
@@ -247,6 +258,11 @@ export function ConfigPage() {
         teamCount={teamCount}
         onClose={() => setSelectOpen(false)}
         onConfirm={setParticipants}
+      />
+
+      <ManageRosterModal
+        open={manageOpen}
+        onClose={() => setManageOpen(false)}
       />
     </div>
   );
