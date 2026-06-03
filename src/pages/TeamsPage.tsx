@@ -14,6 +14,7 @@ import { EmptyState } from '@/components/ui/EmptyState';
 export function TeamsPage() {
   const generateTeams = useVolleyStore((s) => s.generateTeams);
   const applySuggestion = useVolleyStore((s) => s.applySuggestion);
+  const renameTeam = useVolleyStore((s) => s.renameTeam);
   const setScreen = useVolleyStore((s) => s.setScreen);
 
   const { teams, playersById, metricsByTeam, spread, suggestions } =
@@ -110,6 +111,7 @@ export function TeamsPage() {
                     ? 'weak'
                     : null
               }
+              onRename={(name) => renameTeam(team.id, name)}
             />
           ))}
         </div>
