@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import type { Player, PlayerLevel } from '@/types';
-import { LEVELS } from '@/data/levels';
+import { LEVELS, chicks } from '@/data/levels';
 import { cn } from '@/utils/cn';
 
 interface LevelCountsProps {
@@ -57,17 +57,18 @@ export function LevelCounts({ players, selected, onSelect }: LevelCountsProps) {
           >
             <span
               className={cn(
-                'inline-flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold',
+                'inline-flex max-w-full flex-wrap items-center justify-center gap-0 rounded-full px-1.5 py-0.5 text-[11px] leading-none',
                 lvl.badgeClass,
               )}
+              title={`Nivel ${lvl.value}`}
             >
-              <span aria-hidden className="text-sm leading-none">🐤</span>
+              {chicks(lvl.value)}
             </span>
             <span className="mt-1 text-lg font-extrabold leading-none tabular-nums text-slate-800 dark:text-slate-100">
               {count}
             </span>
             <span className="mt-0.5 truncate text-[10px] font-medium text-slate-400 dark:text-slate-500">
-              {lvl.value} · {lvl.label}
+              {lvl.label}
             </span>
           </button>
         );

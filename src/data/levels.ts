@@ -65,3 +65,11 @@ export function getLevel(level: PlayerLevel): LevelDefinition {
   // Todos los niveles válidos existen en el mapa; fallback defensivo al nivel 1.
   return LEVEL_MAP.get(level) ?? LEVELS[0];
 }
+
+/** Emoji de pollito usado como unidad de nivel. */
+export const CHICK = '🐤';
+
+/** Representa el nivel como N pollitos (1 → 🐤, 2 → 🐤🐤, …). */
+export function chicks(level: PlayerLevel): string {
+  return CHICK.repeat(level);
+}

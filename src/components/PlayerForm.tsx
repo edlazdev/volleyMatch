@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { UserPlus } from 'lucide-react';
 import type { PlayerLevel } from '@/types';
-import { LEVELS } from '@/data/levels';
+import { LEVELS, chicks } from '@/data/levels';
 import { Input } from '@/components/ui/Input';
 import { Select } from '@/components/ui/Select';
 import { Button } from '@/components/ui/Button';
@@ -60,7 +60,7 @@ export function PlayerForm({ disabled, onSubmit }: PlayerFormProps) {
           <Select disabled={disabled} {...register('level', { required: true })}>
             {LEVELS.map((lvl) => (
               <option key={lvl.value} value={lvl.value}>
-                {lvl.value} · {lvl.label}
+                {chicks(lvl.value)} {lvl.label}
               </option>
             ))}
           </Select>
