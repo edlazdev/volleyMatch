@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { UserPlus } from 'lucide-react';
 import type { PlayerLevel } from '@/types';
-import { LEVELS, chicks } from '@/data/levels';
+import { LEVELS, LEVEL_SELECT_CLASS, chicks } from '@/data/levels';
 import { Input } from '@/components/ui/Input';
 import { Select } from '@/components/ui/Select';
 import { Button } from '@/components/ui/Button';
@@ -23,10 +23,13 @@ export function PlayerForm({ disabled, onSubmit }: PlayerFormProps) {
     handleSubmit,
     reset,
     setFocus,
+    watch,
     formState: { errors },
   } = useForm<PlayerFormValues>({
     defaultValues: { name: '', level: 3 },
   });
+
+  const currentLevel = Number(watch('level')) as PlayerLevel;
 
   const submit = handleSubmit((values) => {
     onSubmit(values.name, Number(values.level) as PlayerLevel);
@@ -57,7 +60,12 @@ export function PlayerForm({ disabled, onSubmit }: PlayerFormProps) {
           <label className="mb-1.5 block text-xs font-semibold text-slate-500 dark:text-slate-400">
             Nivel
           </label>
-          <Select disabled={disabled} {...register('level', { required: true })}>
+          <Select
+            disabled={disabled}
+            accentClass={LEVEL_SELECT_CLASS[currentLevel]}
+            className="font-semibold"
+            {...register('level', { required: true })}
+          >
             {LEVELS.map((lvl) => (
               <option key={lvl.value} value={lvl.value} title={lvl.label}>
                 {chicks(lvl.value)}
