@@ -5,17 +5,22 @@ Aplicación web **mobile first** para formar **equipos de vóley equilibrados** 
 ## ✨ Características
 
 - **Configuración flexible**: 2 a 5 equipos (6 jugadores por equipo).
+- **Niveles con temática de pollito 🐤**: el nivel se representa con esa cantidad de pollitos (1 = 🐤 … 6 = 🐤🐤🐤🐤🐤🐤). El nombre del nivel aparece como tooltip.
+- **Arma tu lista** de varias formas:
+  - **Elegir participantes** desde un pozo con checkboxes (avisa si faltan para el cupo).
+  - **Editar lista por defecto** (CRUD): agregar, editar, eliminar, vaciar (con confirmación) y restaurar.
+  - **Importar lista** pegando texto (p. ej. del grupo de WhatsApp): detecta nombres y niveles.
+  - **Agregar jugador** a mano.
+  - **Añadir a lista por defecto** los jugadores actuales (fusión sin duplicar ni borrar).
 - **Algoritmo de balance**: agrupa por nivel, mezcla y reparte en serpentina para equipos parejos.
 - **Métricas por equipo**: nivel promedio, nivel total y conteo de jugadores.
 - **Indicador de equilibrio** y **sugerencias automáticas de intercambio**.
-- **Niveles con temática de pollito 🐤** (1 = más alto, 6 = más bajo).
-- **Lista por defecto + selección de participantes**: roster precargado del que eliges quiénes juegan con checkboxes.
-- **Importar lista** pegando texto (p. ej. la lista del grupo de WhatsApp): detecta nombres y niveles.
-- **Lista predeterminada**: guarda tu roster y recárgalo con un clic (persistido).
+- **Distribución por nivel** con tarjetas-contador que además **filtran** la lista al tocarlas.
 - **Drag & Drop** (mouse, touch, tablet y teclado) con [dnd-kit](https://dndkit.com).
 - **Enfrentamientos** generados automáticamente (round robin).
+- **Layout responsive**: la lista de jugadores pasa a 2 columnas en tablet/desktop.
 - **Modo claro / oscuro**.
-- **Persistencia automática** en LocalStorage (jugadores, equipos y configuración).
+- **Persistencia automática** en LocalStorage (jugadores, equipos, configuración y lista por defecto).
 
 ## 🧱 Stack
 
@@ -43,37 +48,59 @@ npm run lint      # Chequeo de tipos (tsc --noEmit)
 ```text
 src/
 ├── components/      # Componentes (UI + dominio + dnd)
-│   ├── ui/          # Botones, inputs, cards, badges reutilizables
+│   ├── ui/          # Button, Card, Input, Select, Modal, badges…
 │   └── dnd/         # Piezas de drag & drop
 ├── pages/           # ConfigPage, TeamsPage, MatchesPage
 ├── layouts/         # AppLayout (header, navegación, footer)
 ├── hooks/           # useTheme, useTeamData, useTeamDnD
 ├── store/           # Store Zustand + persistencia
 ├── services/        # Adaptador de LocalStorage
-├── utils/           # Algoritmos de balance, matches, helpers
+├── utils/           # Algoritmos de balance, matches, parseo, helpers
 ├── types/           # Tipos TypeScript del dominio
-├── data/            # Catálogo de niveles y constantes
+├── data/            # Catálogo de niveles, roster de fábrica, constantes
 └── App.tsx
 ```
 
 ## 🧠 Lógica de balance
 
-1. `groupPlayersByLevel()` — agrupa jugadores por nivel (de mayor a menor).
+1. `groupPlayersByLevel()` — agrupa por nivel (de mayor a menor jerarquía: menor número primero).
 2. `shufflePlayers()` — mezcla aleatoria (Fisher–Yates).
 3. `generateTeams()` — reparte en serpentina para equilibrar el nivel total.
 4. `calculateTeamMetrics()` — promedio, total y conteo por equipo.
 5. `getBalanceSuggestions()` — propone intercambios que reducen la diferencia.
 6. `generateMatches()` — round robin de enfrentamientos.
 
-## 📊 Niveles
+## 🐤 Niveles
 
-> Escala invertida: **1 es el nivel más alto** y 6 el más bajo.
+> Escala invertida: **1 es el nivel más alto** y 6 el más bajo. El nivel se muestra como esa cantidad de pollitos.
 
-| Nivel | Descripción      |
-| ----- | ---------------- |
-| 1     | Competitivo      |
-| 2     | Avanzado         |
-| 3     | Intermedio Alto  |
-| 4     | Intermedio       |
-| 5     | Básico           |
-| 6     | Principiante     |
+| Nivel | Pollitos          | Descripción      |
+| ----- | ----------------- | ---------------- |
+| 1     | 🐤                | Competitivo      |
+| 2     | 🐤🐤              | Avanzado         |
+| 3     | 🐤🐤🐤            | Intermedio Alto  |
+| 4     | 🐤🐤🐤🐤          | Intermedio       |
+| 5     | 🐤🐤🐤🐤🐤        | Básico           |
+| 6     | 🐤🐤🐤🐤🐤🐤      | Principiante     |
+
+## 🔄 Lista por defecto (pozo) vs. participantes
+
+Son **dos listas independientes**:
+
+- **Lista por defecto (pozo)**: tu plantel maestro, editable en *Editar lista por defecto* y persistido.
+  - Si nunca la personalizas, se usa una lista de fábrica.
+  - Si la vacías (con confirmación), se respeta vacía al refrescar.
+  - *Añadir a lista por defecto* fusiona jugadores nuevos sin borrar a nadie.
+- **Participantes** (*Jugadores registrados*): quiénes juegan hoy (máximo `equipos × 6`), elegidos del pozo, importados o agregados a mano.
+
+## 🧭 Flujo recomendado
+
+1. Elige la **cantidad de equipos**.
+2. **Arma tu lista**: *Elegir participantes* (o *Importar* / *Agregar*).
+3. Ajusta niveles y revisa la **distribución por nivel**.
+4. **Genera los equipos** equilibrados y reorganiza con **drag & drop**.
+5. Mira los **enfrentamientos** (round robin).
+
+---
+
+Hecho por [edlazdev](https://github.com/edlazdev).

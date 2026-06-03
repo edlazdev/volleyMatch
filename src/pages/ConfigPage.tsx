@@ -240,7 +240,7 @@ export function ConfigPage() {
             >
               <BookmarkPlus className="h-4 w-4" />
               {addedHint === null
-                ? 'Añadir estos jugadores a la lista por defecto'
+                ? 'Añadir jugadores a la lista por defecto'
                 : addedHint > 0
                   ? `+${addedHint} añadido${addedHint === 1 ? '' : 's'} a la lista por defecto`
                   : 'Ya estaban todos en la lista por defecto'}
