@@ -264,6 +264,10 @@ export function ConfigPage() {
         teamCount={teamCount}
         onClose={() => setSelectOpen(false)}
         onConfirm={setParticipants}
+        onEditList={() => {
+          setSelectOpen(false);
+          setManageOpen(true);
+        }}
       />
 
       <ManageRosterModal

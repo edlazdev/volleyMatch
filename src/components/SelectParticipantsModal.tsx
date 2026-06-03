@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Check, CheckCheck, UserCheck } from 'lucide-react';
+import { AlertCircle, Check, CheckCheck, ListPlus, UserCheck } from 'lucide-react';
 import { Modal } from '@/components/ui/Modal';
 import { Button } from '@/components/ui/Button';
 import { LevelBadge } from '@/components/ui/LevelBadge';
@@ -15,6 +15,8 @@ interface SelectParticipantsModalProps {
   teamCount: number;
   onClose: () => void;
   onConfirm: (entries: RosterEntry[]) => void;
+  /** Abre el editor de la lista por defecto (para agregar más personas). */
+  onEditList: () => void;
 }
 
 export function SelectParticipantsModal({
@@ -24,6 +26,7 @@ export function SelectParticipantsModal({
   teamCount,
   onClose,
   onConfirm,
+  onEditList,
 }: SelectParticipantsModalProps) {
   // Conjunto de índices seleccionados.
   const [selected, setSelected] = useState<Set<number>>(new Set());
@@ -105,6 +108,26 @@ export function SelectParticipantsModal({
             {allSelected ? 'Ninguno' : 'Todos'}
           </button>
         </div>
+
+        {roster.length < capacity && (
+          <div className="flex items-start gap-2 rounded-xl bg-amber-50 px-3 py-2.5 text-xs text-amber-700 dark:bg-amber-950/40 dark:text-amber-300">
+            <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
+            <div className="flex-1">
+              Tu lista por defecto tiene{' '}
+              <span className="font-semibold">{roster.length}</span> personas,
+              faltan{' '}
+              <span className="font-semibold">{capacity - roster.length}</span>{' '}
+              para el cupo de {capacity}.
+              <button
+                onClick={onEditList}
+                className="ml-1 inline-flex items-center gap-1 font-bold text-amber-800 underline underline-offset-2 hover:text-amber-900 dark:text-amber-200"
+              >
+                <ListPlus className="h-3.5 w-3.5" />
+                Editar lista
+              </button>
+            </div>
+          </div>
+        )}
 
         <ul className="max-h-[55vh] space-y-1.5 overflow-y-auto">
           {roster.map((p, i) => {
