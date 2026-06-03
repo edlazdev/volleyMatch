@@ -1,6 +1,6 @@
 import { Trash2, Users } from 'lucide-react';
 import type { Player, PlayerLevel } from '@/types';
-import { LEVELS, chicks } from '@/data/levels';
+import { LEVELS, chicks, getLevel } from '@/data/levels';
 import { LevelBadge } from '@/components/ui/LevelBadge';
 import { Select } from '@/components/ui/Select';
 import { EmptyState } from '@/components/ui/EmptyState';
@@ -47,11 +47,12 @@ export function PlayerList({
               onChange={(e) =>
                 onChangeLevel(player.id, Number(e.target.value) as PlayerLevel)
               }
+              title={getLevel(player.level).label}
               className="h-9 text-xs"
             >
               {LEVELS.map((lvl) => (
-                <option key={lvl.value} value={lvl.value}>
-                  {chicks(lvl.value)} {lvl.label}
+                <option key={lvl.value} value={lvl.value} title={lvl.label}>
+                  {lvl.value} {chicks(lvl.value)}
                 </option>
               ))}
             </Select>

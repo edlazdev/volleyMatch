@@ -51,8 +51,8 @@ export function LevelCounts({ players, selected, onSelect }: LevelCountsProps) {
             )}
             title={
               interactive
-                ? `Filtrar por ${lvl.label}`
-                : lvl.label
+                ? `Nivel ${lvl.value} · ${lvl.label} (filtrar)`
+                : `Nivel ${lvl.value} · ${lvl.label}`
             }
           >
             <span
@@ -66,9 +66,6 @@ export function LevelCounts({ players, selected, onSelect }: LevelCountsProps) {
             </span>
             <span className="mt-1 text-lg font-extrabold leading-none tabular-nums text-slate-800 dark:text-slate-100">
               {count}
-            </span>
-            <span className="mt-0.5 truncate text-[10px] font-medium text-slate-400 dark:text-slate-500">
-              {lvl.label}
             </span>
           </button>
         );
