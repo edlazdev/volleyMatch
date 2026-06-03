@@ -21,6 +21,14 @@ export interface RosterEntry {
   level: PlayerLevel;
 }
 
+/** Compara dos rosters por contenido (nombre + nivel, en orden). */
+function rostersEqual(a: RosterEntry[], b: RosterEntry[]): boolean {
+  if (a.length !== b.length) return false;
+  return a.every(
+    (e, i) => e.name === b[i].name && e.level === b[i].level,
+  );
+}
+
 interface VolleyState {
   // --- Estado ---
   teamCount: number;
@@ -28,8 +36,13 @@ interface VolleyState {
   teams: Team[];
   matches: Match[];
   screen: Screen;
-  /** Lista predeterminada guardada por el usuario (persistida). */
-  defaultRoster: RosterEntry[];
+  /**
+   * Lista del usuario (persistida).
+   * - `null`  → nunca personalizada: se usa la lista de fábrica.
+   * - `[]`    → vaciada a propósito: se respeta vacía.
+   * - `[...]` → lista propia guardada.
+   */
+  defaultRoster: RosterEntry[] | null;
 
   // --- Configuración ---
   setTeamCount: (count: number) => void;
@@ -50,17 +63,17 @@ interface VolleyState {
   saveAsDefault: () => void;
   /** Carga la lista predeterminada (o el roster de ejemplo si no hay). */
   loadDefault: () => void;
-  /** Elimina la lista predeterminada guardada. */
+  /** Vacía la lista a propósito (queda `[]`, se respeta vacía al refrescar). */
   clearDefault: () => void;
-  /** Reemplaza por completo la lista predeterminada. */
+  /** Reemplaza por completo la lista. */
   setDefaultRoster: (entries: RosterEntry[]) => void;
-  /** Agrega una persona a la lista predeterminada. */
+  /** Agrega una persona (si nunca se personalizó, parte de la de fábrica). */
   addToDefault: (name: string, level: PlayerLevel) => void;
-  /** Edita una entrada de la lista predeterminada por índice. */
+  /** Edita una entrada por índice. */
   updateDefaultEntry: (index: number, patch: Partial<RosterEntry>) => void;
-  /** Quita una persona de la lista predeterminada por índice. */
+  /** Quita una persona por índice. */
   removeFromDefault: (index: number) => void;
-  /** Restaura la lista predeterminada a la de fábrica. */
+  /** Restaura la lista por defecto de fábrica (vuelve a `null`). */
   resetDefaultToFactory: () => void;
 
   // --- Generación ---
@@ -111,7 +124,7 @@ export const useVolleyStore = create<VolleyState>()(
       teams: [],
       matches: [],
       screen: 'config',
-      defaultRoster: [],
+      defaultRoster: null,
 
       setTeamCount: (count) =>
         set({ teamCount: clampTeamCount(count) }),
@@ -165,7 +178,9 @@ export const useVolleyStore = create<VolleyState>()(
       loadDefault: () => {
         const { defaultRoster, teamCount } = get();
         const source =
-          defaultRoster.length > 0 ? defaultRoster : SAMPLE_ROSTER;
+          defaultRoster && defaultRoster.length > 0
+            ? defaultRoster
+            : SAMPLE_ROSTER;
         const capacity = maxPlayersFor(teamCount);
         const players = source.slice(0, capacity).map<Player>((e) => ({
           id: createId(),
@@ -175,6 +190,7 @@ export const useVolleyStore = create<VolleyState>()(
         set({ players, teams: [], matches: [] });
       },
 
+      // Vaciar a propósito: queda `[]` (no `null`), así se respeta al refrescar.
       clearDefault: () => set({ defaultRoster: [] }),
 
       setDefaultRoster: (entries) =>
@@ -188,30 +204,32 @@ export const useVolleyStore = create<VolleyState>()(
       addToDefault: (name, level) => {
         const trimmed = name.trim();
         if (!trimmed) return;
-        set((state) => ({
+        // Si nunca se personalizó (null), partimos de la lista de fábrica.
+        const base = get().defaultRoster ?? SAMPLE_ROSTER;
+        set({
           defaultRoster: [
-            ...state.defaultRoster,
+            ...base.map((e) => ({ ...e })),
             { name: trimmed.slice(0, 40), level },
           ],
-        }));
+        });
       },
 
-      updateDefaultEntry: (index, patch) =>
-        set((state) => ({
-          defaultRoster: state.defaultRoster.map((entry, i) =>
-            i === index ? { ...entry, ...patch } : entry,
-          ),
-        })),
-
-      removeFromDefault: (index) =>
-        set((state) => ({
-          defaultRoster: state.defaultRoster.filter((_, i) => i !== index),
-        })),
-
-      resetDefaultToFactory: () =>
+      updateDefaultEntry: (index, patch) => {
+        const base = get().defaultRoster ?? SAMPLE_ROSTER;
         set({
-          defaultRoster: SAMPLE_ROSTER.map((e) => ({ ...e })),
-        }),
+          defaultRoster: base.map((entry, i) =>
+            i === index ? { ...entry, ...patch } : { ...entry },
+          ),
+        });
+      },
+
+      removeFromDefault: (index) => {
+        const base = get().defaultRoster ?? SAMPLE_ROSTER;
+        set({ defaultRoster: base.filter((_, i) => i !== index) });
+      },
+
+      // Volver a `null` = usar la lista de fábrica (también tras refrescar).
+      resetDefaultToFactory: () => set({ defaultRoster: null }),
 
       updatePlayer: (id, patch) =>
         set((state) => ({
@@ -325,8 +343,22 @@ export const useVolleyStore = create<VolleyState>()(
     }),
     {
       name: STORAGE_KEY,
-      version: 1,
+      version: 2,
       storage: createJSONStorage(() => safeStorage),
+      // v1 → v2: si la lista guardada coincide con la de fábrica (se sembraba
+      // automáticamente al abrir el editor), la tratamos como "no personalizada"
+      // poniéndola en null, para que la de fábrica siga vigente tras refrescar.
+      migrate: (persisted, version) => {
+        const state = (persisted ?? {}) as Partial<VolleyState>;
+        if (
+          version < 2 &&
+          Array.isArray(state.defaultRoster) &&
+          rostersEqual(state.defaultRoster, SAMPLE_ROSTER)
+        ) {
+          state.defaultRoster = null;
+        }
+        return state as VolleyState;
+      },
       // Persistimos solo el dominio; nada de estado derivado de UI volátil.
       partialize: (state) => ({
         teamCount: state.teamCount,

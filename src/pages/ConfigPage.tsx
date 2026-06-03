@@ -37,7 +37,6 @@ export function ConfigPage() {
   const setParticipants = useVolleyStore((s) => s.setParticipants);
   const saveAsDefault = useVolleyStore((s) => s.saveAsDefault);
   const defaultRoster = useVolleyStore((s) => s.defaultRoster);
-  const hasDefault = defaultRoster.length > 0;
 
   const { players, validation } = useTeamData();
   const [importOpen, setImportOpen] = useState(false);
@@ -46,8 +45,11 @@ export function ConfigPage() {
   const [savedHint, setSavedHint] = useState(false);
   const [levelFilter, setLevelFilter] = useState<PlayerLevel | null>(null);
 
-  /** Lista base para elegir participantes: la guardada o la de fábrica. */
-  const baseRoster = hasDefault ? defaultRoster : SAMPLE_ROSTER;
+  /**
+   * Lista base para elegir participantes:
+   * `null` (nunca personalizada) → la de fábrica; si no, la del usuario.
+   */
+  const baseRoster = defaultRoster ?? SAMPLE_ROSTER;
 
   const visiblePlayers = useMemo(
     () =>
