@@ -8,6 +8,8 @@ Aplicación web **mobile first** para formar **equipos de vóley equilibrados** 
 - **Algoritmo de balance**: agrupa por nivel, mezcla y reparte en serpentina para equipos parejos.
 - **Métricas por equipo**: nivel promedio, nivel total y conteo de jugadores.
 - **Indicador de equilibrio** y **sugerencias automáticas de intercambio**.
+- **Niveles con temática de pollito 🐤** (1 = más alto, 6 = más bajo).
+- **Lista por defecto + selección de participantes**: roster precargado del que eliges quiénes juegan con checkboxes.
 - **Importar lista** pegando texto (p. ej. la lista del grupo de WhatsApp): detecta nombres y niveles.
 - **Lista predeterminada**: guarda tu roster y recárgalo con un clic (persistido).
 - **Drag & Drop** (mouse, touch, tablet y teclado) con [dnd-kit](https://dndkit.com).

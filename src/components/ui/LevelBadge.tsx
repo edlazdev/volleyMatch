@@ -24,6 +24,7 @@ export function LevelBadge({
       )}
       title={`${def.shortLabel} · ${def.label}`}
     >
+      <span aria-hidden className="leading-none">🐤</span>
       <span className="font-bold">{level}</span>
       {showLabel && <span className="hidden sm:inline">· {def.label}</span>}
     </span>

@@ -4,13 +4,14 @@ import {
   BookmarkPlus,
   CheckCircle2,
   ClipboardList,
-  Download,
   Sparkles,
   Trash2,
+  UserCheck,
 } from 'lucide-react';
 import { useVolleyStore, maxPlayersFor } from '@/store/useVolleyStore';
 import { useTeamData } from '@/hooks/useTeamData';
 import { MAX_TEAMS, MIN_TEAMS, getLevel } from '@/data/levels';
+import { SAMPLE_ROSTER } from '@/data/sampleRoster';
 import type { PlayerLevel } from '@/types';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
@@ -20,6 +21,7 @@ import { PlayerForm } from '@/components/PlayerForm';
 import { PlayerList } from '@/components/PlayerList';
 import { LevelCounts } from '@/components/LevelCounts';
 import { ImportPlayersModal } from '@/components/ImportPlayersModal';
+import { SelectParticipantsModal } from '@/components/SelectParticipantsModal';
 
 export function ConfigPage() {
   const teamCount = useVolleyStore((s) => s.teamCount);
@@ -30,14 +32,19 @@ export function ConfigPage() {
   const updatePlayer = useVolleyStore((s) => s.updatePlayer);
   const clearPlayers = useVolleyStore((s) => s.clearPlayers);
   const generateTeams = useVolleyStore((s) => s.generateTeams);
+  const setParticipants = useVolleyStore((s) => s.setParticipants);
   const saveAsDefault = useVolleyStore((s) => s.saveAsDefault);
-  const loadDefault = useVolleyStore((s) => s.loadDefault);
-  const hasDefault = useVolleyStore((s) => s.defaultRoster.length > 0);
+  const defaultRoster = useVolleyStore((s) => s.defaultRoster);
+  const hasDefault = defaultRoster.length > 0;
 
   const { players, validation } = useTeamData();
   const [importOpen, setImportOpen] = useState(false);
+  const [selectOpen, setSelectOpen] = useState(false);
   const [savedHint, setSavedHint] = useState(false);
   const [levelFilter, setLevelFilter] = useState<PlayerLevel | null>(null);
+
+  /** Lista base para elegir participantes: la guardada o la de fábrica. */
+  const baseRoster = hasDefault ? defaultRoster : SAMPLE_ROSTER;
 
   const visiblePlayers = useMemo(
     () =>
@@ -96,8 +103,12 @@ export function ConfigPage() {
         </h2>
         <PlayerForm disabled={atCapacity} onSubmit={addPlayer} />
 
-        {/* Acciones de lista: importar y predeterminada */}
+        {/* Acciones de lista: elegir participantes, importar, predeterminada */}
         <div className="mt-3 flex flex-wrap gap-2 border-t border-slate-100 pt-3 dark:border-slate-800">
+          <Button size="sm" onClick={() => setSelectOpen(true)}>
+            <UserCheck className="h-4 w-4" />
+            Elegir participantes
+          </Button>
           <Button
             variant="secondary"
             size="sm"
@@ -106,10 +117,6 @@ export function ConfigPage() {
           >
             <ClipboardList className="h-4 w-4" />
             Importar lista
-          </Button>
-          <Button variant="secondary" size="sm" onClick={loadDefault}>
-            <Download className="h-4 w-4" />
-            {hasDefault ? 'Cargar predeterminada' : 'Cargar ejemplo'}
           </Button>
           <Button
             variant="ghost"
@@ -231,6 +238,15 @@ export function ConfigPage() {
         availableSlots={Math.max(0, maxPlayers - players.length)}
         onClose={() => setImportOpen(false)}
         onImport={addPlayers}
+      />
+
+      <SelectParticipantsModal
+        open={selectOpen}
+        roster={baseRoster}
+        capacity={maxPlayers}
+        teamCount={teamCount}
+        onClose={() => setSelectOpen(false)}
+        onConfirm={setParticipants}
       />
     </div>
   );

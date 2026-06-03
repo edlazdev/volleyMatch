@@ -61,13 +61,13 @@ export function LevelCounts({ players, selected, onSelect }: LevelCountsProps) {
                 lvl.badgeClass,
               )}
             >
-              {lvl.value}
+              <span aria-hidden className="text-sm leading-none">🐤</span>
             </span>
             <span className="mt-1 text-lg font-extrabold leading-none tabular-nums text-slate-800 dark:text-slate-100">
               {count}
             </span>
             <span className="mt-0.5 truncate text-[10px] font-medium text-slate-400 dark:text-slate-500">
-              {lvl.label}
+              {lvl.value} · {lvl.label}
             </span>
           </button>
         );

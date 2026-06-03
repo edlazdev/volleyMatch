@@ -39,6 +39,8 @@ interface VolleyState {
   addPlayer: (name: string, level: PlayerLevel) => void;
   /** Agrega varios jugadores (import por texto) respetando el cupo máximo. */
   addPlayers: (entries: RosterEntry[]) => number;
+  /** Reemplaza la lista de jugadores por los participantes seleccionados. */
+  setParticipants: (entries: RosterEntry[]) => void;
   updatePlayer: (id: string, patch: Partial<Omit<Player, 'id'>>) => void;
   removePlayer: (id: string) => void;
   clearPlayers: () => void;
@@ -128,6 +130,18 @@ export const useVolleyStore = create<VolleyState>()(
         if (toAdd.length === 0) return 0;
         set({ players: [...players, ...toAdd] });
         return toAdd.length;
+      },
+
+      setParticipants: (entries) => {
+        const players = entries
+          .map((e) => ({ name: e.name.trim(), level: e.level }))
+          .filter((e) => e.name.length > 0)
+          .map<Player>((e) => ({
+            id: createId(),
+            name: e.name,
+            level: e.level,
+          }));
+        set({ players, teams: [], matches: [] });
       },
 
       saveAsDefault: () =>
