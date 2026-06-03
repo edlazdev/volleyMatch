@@ -1,0 +1,135 @@
+import { useMemo } from 'react';
+import { AlertCircle, CheckCircle2, Sparkles, Trash2 } from 'lucide-react';
+import { useVolleyStore, maxPlayersFor } from '@/store/useVolleyStore';
+import { useTeamData } from '@/hooks/useTeamData';
+import { MAX_TEAMS, MIN_TEAMS } from '@/data/levels';
+import { Card } from '@/components/ui/Card';
+import { Button } from '@/components/ui/Button';
+import { SegmentedControl } from '@/components/ui/SegmentedControl';
+import { ProgressBar } from '@/components/ui/ProgressBar';
+import { PlayerForm } from '@/components/PlayerForm';
+import { PlayerList } from '@/components/PlayerList';
+
+export function ConfigPage() {
+  const teamCount = useVolleyStore((s) => s.teamCount);
+  const setTeamCount = useVolleyStore((s) => s.setTeamCount);
+  const addPlayer = useVolleyStore((s) => s.addPlayer);
+  const removePlayer = useVolleyStore((s) => s.removePlayer);
+  const updatePlayer = useVolleyStore((s) => s.updatePlayer);
+  const clearPlayers = useVolleyStore((s) => s.clearPlayers);
+  const generateTeams = useVolleyStore((s) => s.generateTeams);
+
+  const { players, validation } = useTeamData();
+
+  const teamOptions = useMemo(
+    () =>
+      Array.from({ length: MAX_TEAMS - MIN_TEAMS + 1 }, (_, i) => {
+        const value = MIN_TEAMS + i;
+        return { value, label: `${value}` };
+      }),
+    [],
+  );
+
+  const maxPlayers = maxPlayersFor(teamCount);
+  const atCapacity = players.length >= maxPlayers;
+
+  return (
+    <div className="space-y-5 animate-fade-in">
+      {/* Configuración de equipos */}
+      <Card className="p-4 sm:p-5">
+        <div className="mb-3 flex items-center justify-between">
+          <div>
+            <h2 className="text-sm font-bold text-slate-800 dark:text-slate-100">
+              Cantidad de equipos
+            </h2>
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              Se necesitan 6 jugadores por equipo.
+            </p>
+          </div>
+          <span className="rounded-full bg-brand-50 px-2.5 py-1 text-xs font-bold text-brand-700 dark:bg-brand-950 dark:text-brand-300">
+            {maxPlayers} jugadores
+          </span>
+        </div>
+        <SegmentedControl
+          value={teamCount}
+          options={teamOptions}
+          onChange={setTeamCount}
+        />
+      </Card>
+
+      {/* Registro de jugadores */}
+      <Card className="p-4 sm:p-5">
+        <h2 className="mb-3 text-sm font-bold text-slate-800 dark:text-slate-100">
+          Agregar jugador
+        </h2>
+        <PlayerForm disabled={atCapacity} onSubmit={addPlayer} />
+      </Card>
+
+      {/* Contador + validación */}
+      <Card className="p-4 sm:p-5">
+        <div className="mb-2 flex items-center justify-between text-sm">
+          <span className="font-semibold text-slate-700 dark:text-slate-200">
+            Jugadores registrados
+          </span>
+          <span className="font-bold tabular-nums text-slate-800 dark:text-slate-100">
+            {players.length} / {maxPlayers}
+          </span>
+        </div>
+        <ProgressBar
+          value={players.length}
+          max={maxPlayers}
+          tone={validation.isValid ? 'ok' : 'warn'}
+        />
+
+        {validation.message ? (
+          <div className="mt-3 flex items-start gap-2 rounded-xl bg-amber-50 px-3 py-2.5 text-sm text-amber-700 dark:bg-amber-950/40 dark:text-amber-300">
+            <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
+            <span>{validation.message}</span>
+          </div>
+        ) : (
+          <div className="mt-3 flex items-center gap-2 rounded-xl bg-emerald-50 px-3 py-2.5 text-sm text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300">
+            <CheckCircle2 className="h-4 w-4 shrink-0" />
+            <span>¡Listo! Tienes el número exacto de jugadores.</span>
+          </div>
+        )}
+      </Card>
+
+      {/* Lista de jugadores */}
+      <Card className="p-4 sm:p-5">
+        <div className="mb-1 flex items-center justify-between">
+          <h2 className="text-sm font-bold text-slate-800 dark:text-slate-100">
+            Lista de jugadores
+          </h2>
+          {players.length > 0 && (
+            <button
+              onClick={clearPlayers}
+              className="inline-flex items-center gap-1 text-xs font-semibold text-rose-500 hover:text-rose-600"
+            >
+              <Trash2 className="h-3.5 w-3.5" />
+              Vaciar
+            </button>
+          )}
+        </div>
+        <PlayerList
+          players={players}
+          onRemove={removePlayer}
+          onChangeLevel={(id, level) => updatePlayer(id, { level })}
+        />
+      </Card>
+
+      {/* CTA fija */}
+      <div className="sticky bottom-4 z-20">
+        <Button
+          fullWidth
+          size="lg"
+          disabled={!validation.isValid}
+          onClick={generateTeams}
+          className="shadow-glow"
+        >
+          <Sparkles className="h-5 w-5" />
+          Generar equipos equilibrados
+        </Button>
+      </div>
+    </div>
+  );
+}
