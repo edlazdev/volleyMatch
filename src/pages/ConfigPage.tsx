@@ -10,7 +10,8 @@ import {
 } from 'lucide-react';
 import { useVolleyStore, maxPlayersFor } from '@/store/useVolleyStore';
 import { useTeamData } from '@/hooks/useTeamData';
-import { MAX_TEAMS, MIN_TEAMS } from '@/data/levels';
+import { MAX_TEAMS, MIN_TEAMS, getLevel } from '@/data/levels';
+import type { PlayerLevel } from '@/types';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { SegmentedControl } from '@/components/ui/SegmentedControl';
@@ -36,6 +37,15 @@ export function ConfigPage() {
   const { players, validation } = useTeamData();
   const [importOpen, setImportOpen] = useState(false);
   const [savedHint, setSavedHint] = useState(false);
+  const [levelFilter, setLevelFilter] = useState<PlayerLevel | null>(null);
+
+  const visiblePlayers = useMemo(
+    () =>
+      levelFilter === null
+        ? players
+        : players.filter((p) => p.level === levelFilter),
+    [players, levelFilter],
+  );
 
   const handleSaveDefault = () => {
     saveAsDefault();
@@ -163,14 +173,40 @@ export function ConfigPage() {
         {players.length > 0 && (
           <div className="mb-4">
             <p className="mb-2 text-xs font-semibold text-slate-500 dark:text-slate-400">
-              Distribución por nivel
+              Distribución por nivel{' '}
+              <span className="font-normal text-slate-400">
+                · toca un nivel para filtrar
+              </span>
             </p>
-            <LevelCounts players={players} />
+            <LevelCounts
+              players={players}
+              selected={levelFilter}
+              onSelect={(lvl) =>
+                setLevelFilter((prev) => (prev === lvl ? null : lvl))
+              }
+            />
+          </div>
+        )}
+
+        {levelFilter !== null && (
+          <div className="mb-3 flex items-center justify-between rounded-xl bg-brand-50 px-3 py-2 text-sm dark:bg-brand-950/40">
+            <span className="font-medium text-brand-700 dark:text-brand-300">
+              Mostrando nivel {levelFilter} · {getLevel(levelFilter).label}
+              <span className="ml-1 text-brand-500">
+                ({visiblePlayers.length})
+              </span>
+            </span>
+            <button
+              onClick={() => setLevelFilter(null)}
+              className="text-xs font-semibold text-brand-600 hover:text-brand-700 dark:text-brand-400"
+            >
+              Ver todos
+            </button>
           </div>
         )}
 
         <PlayerList
-          players={players}
+          players={visiblePlayers}
           onRemove={removePlayer}
           onChangeLevel={(id, level) => updatePlayer(id, { level })}
         />
