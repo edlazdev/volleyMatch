@@ -97,6 +97,8 @@ interface VolleyState {
   regenerateMatches: () => void;
   /** Renombra un equipo. */
   renameTeam: (teamId: string, name: string) => void;
+  /** Restaura los nombres a "Equipo 1", "Equipo 2", … */
+  resetTeamNames: () => void;
 
   // --- Torneo / llaves ---
   setFormat: (format: TournamentFormat) => void;
@@ -329,6 +331,11 @@ export const useVolleyStore = create<VolleyState>()(
           teams: state.teams.map((t) =>
             t.id === teamId ? { ...t, name: name.slice(0, 24) } : t,
           ),
+        })),
+
+      resetTeamNames: () =>
+        set((state) => ({
+          teams: state.teams.map((t, i) => ({ ...t, name: `Equipo ${i + 1}` })),
         })),
 
       setFormat: (format) => set({ format }),

@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { DndContext, DragOverlay, closestCorners } from '@dnd-kit/core';
-import { RefreshCw, Swords, Users } from 'lucide-react';
+import { RefreshCw, RotateCcw, Swords, Users } from 'lucide-react';
 import { useVolleyStore } from '@/store/useVolleyStore';
 import { useTeamData } from '@/hooks/useTeamData';
 import { useTeamDnD } from '@/hooks/useTeamDnD';
@@ -15,6 +15,7 @@ export function TeamsPage() {
   const generateTeams = useVolleyStore((s) => s.generateTeams);
   const applySuggestion = useVolleyStore((s) => s.applySuggestion);
   const renameTeam = useVolleyStore((s) => s.renameTeam);
+  const resetTeamNames = useVolleyStore((s) => s.resetTeamNames);
   const setScreen = useVolleyStore((s) => s.setScreen);
 
   const { teams, playersById, metricsByTeam, spread, suggestions } =
@@ -61,10 +62,16 @@ export function TeamsPage() {
         <h2 className="text-lg font-extrabold tracking-tight">
           Equipos generados
         </h2>
-        <Button variant="secondary" size="sm" onClick={generateTeams}>
-          <RefreshCw className="h-4 w-4" />
-          Regenerar
-        </Button>
+        <div className="flex gap-2">
+          <Button variant="secondary" size="sm" onClick={resetTeamNames}>
+            <RotateCcw className="h-4 w-4" />
+            <span className="hidden sm:inline">Reiniciar nombres</span>
+          </Button>
+          <Button variant="secondary" size="sm" onClick={generateTeams}>
+            <RefreshCw className="h-4 w-4" />
+            Regenerar
+          </Button>
+        </div>
       </div>
 
       <BalanceIndicator spread={spread} />
