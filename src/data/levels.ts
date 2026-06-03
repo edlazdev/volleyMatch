@@ -3,9 +3,9 @@ import type { LevelDefinition, PlayerLevel } from '@/types';
 /** Cantidad de jugadores por equipo en vóley (regla de negocio). */
 export const PLAYERS_PER_TEAM = 6;
 
-/** Rango permitido de equipos. */
+/** Rango permitido de equipos (hasta 16 para torneos). */
 export const MIN_TEAMS = 2;
-export const MAX_TEAMS = 5;
+export const MAX_TEAMS = 16;
 
 /**
  * Catálogo de niveles disponibles.

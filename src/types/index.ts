@@ -48,6 +48,22 @@ export interface Match {
   awayTeamId: string;
 }
 
+/** Formato del torneo. */
+export type TournamentFormat = 'round-robin' | 'knockout';
+
+/** Partido dentro de una llave de eliminación. */
+export interface BracketMatch {
+  id: string;
+  /** Ronda (0 = primera ronda; la última es la final). */
+  round: number;
+  /** Posición del partido dentro de su ronda. */
+  index: number;
+  teamAId: string | null;
+  teamBId: string | null;
+  /** Ganador elegido por el usuario (null = sin definir). */
+  winnerId: string | null;
+}
+
 /** Pantallas / pasos de la aplicación. */
 export type Screen = 'config' | 'teams' | 'matches';
 

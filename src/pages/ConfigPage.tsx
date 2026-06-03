@@ -16,7 +16,7 @@ import { SAMPLE_ROSTER } from '@/data/sampleRoster';
 import type { PlayerLevel } from '@/types';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
-import { SegmentedControl } from '@/components/ui/SegmentedControl';
+import { Stepper } from '@/components/ui/Stepper';
 import { ProgressBar } from '@/components/ui/ProgressBar';
 import { PlayerForm } from '@/components/PlayerForm';
 import { PlayerList } from '@/components/PlayerList';
@@ -65,15 +65,6 @@ export function ConfigPage() {
     window.setTimeout(() => setAddedHint(null), 2400);
   };
 
-  const teamOptions = useMemo(
-    () =>
-      Array.from({ length: MAX_TEAMS - MIN_TEAMS + 1 }, (_, i) => {
-        const value = MIN_TEAMS + i;
-        return { value, label: `${value}` };
-      }),
-    [],
-  );
-
   const maxPlayers = maxPlayersFor(teamCount);
   const atCapacity = players.length >= maxPlayers;
 
@@ -94,10 +85,12 @@ export function ConfigPage() {
             {maxPlayers} jugadores
           </span>
         </div>
-        <SegmentedControl
+        <Stepper
           value={teamCount}
-          options={teamOptions}
+          min={MIN_TEAMS}
+          max={MAX_TEAMS}
           onChange={setTeamCount}
+          suffix="equipos"
         />
       </Card>
 

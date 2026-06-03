@@ -4,7 +4,8 @@ Aplicación web **mobile first** para formar **equipos de vóley equilibrados** 
 
 ## ✨ Características
 
-- **Configuración flexible**: 2 a 5 equipos (6 jugadores por equipo).
+- **Configuración flexible**: 2 a 16 equipos (6 jugadores por equipo) — ideal para torneos.
+- **Modo torneo**: enfrentamientos en **todos contra todos** o **llaves de eliminación** con avance hasta el **campeón 🏆** (siembra por nivel y byes automáticos).
 - **Niveles con temática de pollito 🐤**: el nivel se representa con esa cantidad de pollitos (1 = 🐤 … 6 = 🐤🐤🐤🐤🐤🐤). El nombre del nivel aparece como tooltip.
 - **Arma tu lista** de varias formas:
   - **Elegir participantes** desde un pozo con checkboxes (avisa si faltan para el cupo).
@@ -69,6 +70,7 @@ src/
 4. `calculateTeamMetrics()` — promedio, total y conteo por equipo.
 5. `getBalanceSuggestions()` — propone intercambios que reducen la diferencia.
 6. `generateMatches()` — round robin de enfrentamientos.
+7. `buildBracket()` — llave de eliminación simple (siembra por fuerza + byes); `setBracketWinner()` avanza ganadores hasta la copa.
 
 ## 🐤 Niveles
 

@@ -1,17 +1,24 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import type {
+  BracketMatch,
   Match,
   Player,
   PlayerLevel,
   Screen,
   SwapSuggestion,
   Team,
+  TournamentFormat,
 } from '@/types';
 import { MAX_TEAMS, MIN_TEAMS, PLAYERS_PER_TEAM } from '@/data/levels';
 import { createId } from '@/utils/id';
-import { generateTeams as buildTeams } from '@/utils/teamBalance';
+import {
+  calculateTeamMetrics,
+  generateTeams as buildTeams,
+  indexPlayers,
+} from '@/utils/teamBalance';
 import { generateMatches as buildMatches } from '@/utils/matches';
+import { buildBracket, setBracketWinner } from '@/utils/bracket';
 import { safeStorage, STORAGE_KEY } from '@/services/storage';
 import { SAMPLE_ROSTER } from '@/data/sampleRoster';
 
@@ -35,6 +42,10 @@ interface VolleyState {
   players: Player[];
   teams: Team[];
   matches: Match[];
+  /** Llave de eliminación (torneo). */
+  bracket: BracketMatch[];
+  /** Formato de enfrentamientos mostrado. */
+  format: TournamentFormat;
   screen: Screen;
   /**
    * Lista del usuario (persistida).
@@ -85,6 +96,13 @@ interface VolleyState {
   generateTeams: () => void;
   regenerateMatches: () => void;
 
+  // --- Torneo / llaves ---
+  setFormat: (format: TournamentFormat) => void;
+  /** Reconstruye la llave a partir de los equipos actuales (re-siembra). */
+  regenerateBracket: () => void;
+  /** Elige (o desmarca) el ganador de un partido de la llave. */
+  setMatchWinner: (matchId: string, teamId: string) => void;
+
   // --- Drag & Drop ---
   movePlayer: (
     playerId: string,
@@ -121,6 +139,21 @@ function findTeamOfPlayer(
   return null;
 }
 
+/**
+ * Ordena los equipos por fuerza para sembrar la llave.
+ * Escala invertida: menor nivel total = más fuerte → va primero.
+ */
+function seedTeamIds(teams: Team[], players: Player[]): string[] {
+  const byId = indexPlayers(players);
+  return [...teams]
+    .sort(
+      (a, b) =>
+        calculateTeamMetrics(a, byId).teamTotalLevel -
+        calculateTeamMetrics(b, byId).teamTotalLevel,
+    )
+    .map((t) => t.id);
+}
+
 export const useVolleyStore = create<VolleyState>()(
   persist(
     (set, get) => ({
@@ -128,6 +161,8 @@ export const useVolleyStore = create<VolleyState>()(
       players: [],
       teams: [],
       matches: [],
+      bracket: [],
+      format: 'round-robin',
       screen: 'config',
       defaultRoster: null,
 
@@ -278,13 +313,26 @@ export const useVolleyStore = create<VolleyState>()(
         const { players, teamCount } = get();
         const teams = buildTeams(players, teamCount);
         const matches = buildMatches(teams);
-        set({ teams, matches, screen: 'teams' });
+        const bracket = buildBracket(seedTeamIds(teams, players));
+        set({ teams, matches, bracket, screen: 'teams' });
       },
 
       regenerateMatches: () => {
         const { teams } = get();
         set({ matches: buildMatches(teams) });
       },
+
+      setFormat: (format) => set({ format }),
+
+      regenerateBracket: () => {
+        const { teams, players } = get();
+        set({ bracket: buildBracket(seedTeamIds(teams, players)) });
+      },
+
+      setMatchWinner: (matchId, teamId) =>
+        set((state) => ({
+          bracket: setBracketWinner(state.bracket, matchId, teamId),
+        })),
 
       movePlayer: (playerId, targetTeamId, targetIndex) =>
         set((state) => {
@@ -362,6 +410,8 @@ export const useVolleyStore = create<VolleyState>()(
           players: [],
           teams: [],
           matches: [],
+          bracket: [],
+          format: 'round-robin',
           screen: 'config',
         }),
     }),
@@ -389,6 +439,8 @@ export const useVolleyStore = create<VolleyState>()(
         players: state.players,
         teams: state.teams,
         matches: state.matches,
+        bracket: state.bracket,
+        format: state.format,
         screen: state.screen,
         defaultRoster: state.defaultRoster,
       }),
