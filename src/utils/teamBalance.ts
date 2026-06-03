@@ -201,7 +201,16 @@ export function getBalanceSuggestions(
     }
   }
 
+  // Prioridad: intercambios entre niveles más parecidos (diferencia mínima),
+  // y como desempate, los que más reducen el desbalance.
+  const levelGap = (s: SwapSuggestion) =>
+    Math.abs(s.playerA.level - s.playerB.level);
+
   return suggestions
-    .sort((a, b) => b.improvement - a.improvement)
+    .sort((a, b) => {
+      const gapDiff = levelGap(a) - levelGap(b);
+      if (gapDiff !== 0) return gapDiff;
+      return b.improvement - a.improvement;
+    })
     .slice(0, maxSuggestions);
 }
