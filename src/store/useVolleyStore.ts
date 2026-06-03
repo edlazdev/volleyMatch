@@ -13,6 +13,13 @@ import { createId } from '@/utils/id';
 import { generateTeams as buildTeams } from '@/utils/teamBalance';
 import { generateMatches as buildMatches } from '@/utils/matches';
 import { safeStorage, STORAGE_KEY } from '@/services/storage';
+import { SAMPLE_ROSTER } from '@/data/sampleRoster';
+
+/** Entrada de roster sin id (nombre + nivel). */
+export interface RosterEntry {
+  name: string;
+  level: PlayerLevel;
+}
 
 interface VolleyState {
   // --- Estado ---
@@ -21,6 +28,8 @@ interface VolleyState {
   teams: Team[];
   matches: Match[];
   screen: Screen;
+  /** Lista predeterminada guardada por el usuario (persistida). */
+  defaultRoster: RosterEntry[];
 
   // --- Configuración ---
   setTeamCount: (count: number) => void;
@@ -28,9 +37,19 @@ interface VolleyState {
 
   // --- Jugadores ---
   addPlayer: (name: string, level: PlayerLevel) => void;
+  /** Agrega varios jugadores (import por texto) respetando el cupo máximo. */
+  addPlayers: (entries: RosterEntry[]) => number;
   updatePlayer: (id: string, patch: Partial<Omit<Player, 'id'>>) => void;
   removePlayer: (id: string) => void;
   clearPlayers: () => void;
+
+  // --- Lista predeterminada ---
+  /** Guarda los jugadores actuales como lista predeterminada. */
+  saveAsDefault: () => void;
+  /** Carga la lista predeterminada (o el roster de ejemplo si no hay). */
+  loadDefault: () => void;
+  /** Elimina la lista predeterminada guardada. */
+  clearDefault: () => void;
 
   // --- Generación ---
   generateTeams: () => void;
@@ -80,6 +99,7 @@ export const useVolleyStore = create<VolleyState>()(
       teams: [],
       matches: [],
       screen: 'config',
+      defaultRoster: [],
 
       setTeamCount: (count) =>
         set({ teamCount: clampTeamCount(count) }),
@@ -92,6 +112,46 @@ export const useVolleyStore = create<VolleyState>()(
         const player: Player = { id: createId(), name: trimmed, level };
         set((state) => ({ players: [...state.players, player] }));
       },
+
+      addPlayers: (entries) => {
+        const { players, teamCount } = get();
+        const capacity = maxPlayersFor(teamCount);
+        const room = Math.max(0, capacity - players.length);
+        if (room === 0) return 0;
+
+        const toAdd = entries
+          .map((e) => ({ name: e.name.trim(), level: e.level }))
+          .filter((e) => e.name.length > 0)
+          .slice(0, room)
+          .map<Player>((e) => ({ id: createId(), name: e.name, level: e.level }));
+
+        if (toAdd.length === 0) return 0;
+        set({ players: [...players, ...toAdd] });
+        return toAdd.length;
+      },
+
+      saveAsDefault: () =>
+        set((state) => ({
+          defaultRoster: state.players.map(({ name, level }) => ({
+            name,
+            level,
+          })),
+        })),
+
+      loadDefault: () => {
+        const { defaultRoster, teamCount } = get();
+        const source =
+          defaultRoster.length > 0 ? defaultRoster : SAMPLE_ROSTER;
+        const capacity = maxPlayersFor(teamCount);
+        const players = source.slice(0, capacity).map<Player>((e) => ({
+          id: createId(),
+          name: e.name,
+          level: e.level,
+        }));
+        set({ players, teams: [], matches: [] });
+      },
+
+      clearDefault: () => set({ defaultRoster: [] }),
 
       updatePlayer: (id, patch) =>
         set((state) => ({
@@ -214,6 +274,7 @@ export const useVolleyStore = create<VolleyState>()(
         teams: state.teams,
         matches: state.matches,
         screen: state.screen,
+        defaultRoster: state.defaultRoster,
       }),
     },
   ),

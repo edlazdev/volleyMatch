@@ -1,5 +1,13 @@
-import { useMemo } from 'react';
-import { AlertCircle, CheckCircle2, Sparkles, Trash2 } from 'lucide-react';
+import { useMemo, useState } from 'react';
+import {
+  AlertCircle,
+  BookmarkPlus,
+  CheckCircle2,
+  ClipboardList,
+  Download,
+  Sparkles,
+  Trash2,
+} from 'lucide-react';
 import { useVolleyStore, maxPlayersFor } from '@/store/useVolleyStore';
 import { useTeamData } from '@/hooks/useTeamData';
 import { MAX_TEAMS, MIN_TEAMS } from '@/data/levels';
@@ -9,17 +17,30 @@ import { SegmentedControl } from '@/components/ui/SegmentedControl';
 import { ProgressBar } from '@/components/ui/ProgressBar';
 import { PlayerForm } from '@/components/PlayerForm';
 import { PlayerList } from '@/components/PlayerList';
+import { ImportPlayersModal } from '@/components/ImportPlayersModal';
 
 export function ConfigPage() {
   const teamCount = useVolleyStore((s) => s.teamCount);
   const setTeamCount = useVolleyStore((s) => s.setTeamCount);
   const addPlayer = useVolleyStore((s) => s.addPlayer);
+  const addPlayers = useVolleyStore((s) => s.addPlayers);
   const removePlayer = useVolleyStore((s) => s.removePlayer);
   const updatePlayer = useVolleyStore((s) => s.updatePlayer);
   const clearPlayers = useVolleyStore((s) => s.clearPlayers);
   const generateTeams = useVolleyStore((s) => s.generateTeams);
+  const saveAsDefault = useVolleyStore((s) => s.saveAsDefault);
+  const loadDefault = useVolleyStore((s) => s.loadDefault);
+  const hasDefault = useVolleyStore((s) => s.defaultRoster.length > 0);
 
   const { players, validation } = useTeamData();
+  const [importOpen, setImportOpen] = useState(false);
+  const [savedHint, setSavedHint] = useState(false);
+
+  const handleSaveDefault = () => {
+    saveAsDefault();
+    setSavedHint(true);
+    window.setTimeout(() => setSavedHint(false), 2200);
+  };
 
   const teamOptions = useMemo(
     () =>
@@ -63,6 +84,33 @@ export function ConfigPage() {
           Agregar jugador
         </h2>
         <PlayerForm disabled={atCapacity} onSubmit={addPlayer} />
+
+        {/* Acciones de lista: importar y predeterminada */}
+        <div className="mt-3 flex flex-wrap gap-2 border-t border-slate-100 pt-3 dark:border-slate-800">
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={() => setImportOpen(true)}
+            disabled={atCapacity}
+          >
+            <ClipboardList className="h-4 w-4" />
+            Importar lista
+          </Button>
+          <Button variant="secondary" size="sm" onClick={loadDefault}>
+            <Download className="h-4 w-4" />
+            {hasDefault ? 'Cargar predeterminada' : 'Cargar ejemplo'}
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleSaveDefault}
+            disabled={players.length === 0}
+            title="Guarda los jugadores actuales como tu lista predeterminada"
+          >
+            <BookmarkPlus className="h-4 w-4" />
+            {savedHint ? '¡Guardada!' : 'Guardar como predeterminada'}
+          </Button>
+        </div>
       </Card>
 
       {/* Contador + validación */}
@@ -130,6 +178,13 @@ export function ConfigPage() {
           Generar equipos equilibrados
         </Button>
       </div>
+
+      <ImportPlayersModal
+        open={importOpen}
+        availableSlots={Math.max(0, maxPlayers - players.length)}
+        onClose={() => setImportOpen(false)}
+        onImport={addPlayers}
+      />
     </div>
   );
 }
