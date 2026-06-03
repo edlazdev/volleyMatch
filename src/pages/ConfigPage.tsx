@@ -101,15 +101,15 @@ export function ConfigPage() {
         />
       </Card>
 
-      {/* Registro de jugadores */}
+      {/* Armar la lista (acciones previas a agregar a mano) */}
       <Card className="p-4 sm:p-5">
-        <h2 className="mb-3 text-sm font-bold text-slate-800 dark:text-slate-100">
-          Agregar jugador
+        <h2 className="text-sm font-bold text-slate-800 dark:text-slate-100">
+          Arma tu lista
         </h2>
-        <PlayerForm disabled={atCapacity} onSubmit={addPlayer} />
-
-        {/* Acciones de lista: elegir participantes, importar, predeterminada */}
-        <div className="mt-3 flex flex-wrap gap-2 border-t border-slate-100 pt-3 dark:border-slate-800">
+        <p className="mb-3 text-xs text-slate-500 dark:text-slate-400">
+          Elige del grupo, edita la lista por defecto o importa una lista.
+        </p>
+        <div className="flex flex-wrap gap-2">
           <Button size="sm" onClick={() => setSelectOpen(true)}>
             <UserCheck className="h-4 w-4" />
             Elegir participantes
@@ -120,7 +120,7 @@ export function ConfigPage() {
             onClick={() => setManageOpen(true)}
           >
             <ListPlus className="h-4 w-4" />
-            Editar lista
+            Editar lista por defecto
           </Button>
           <Button
             variant="secondary"
@@ -131,21 +131,15 @@ export function ConfigPage() {
             <ClipboardList className="h-4 w-4" />
             Importar lista
           </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleAddToDefault}
-            disabled={players.length === 0}
-            title="Agrega los jugadores nuevos a la lista por defecto (no la reemplaza)"
-          >
-            <BookmarkPlus className="h-4 w-4" />
-            {addedHint === null
-              ? 'Añadir a lista por defecto'
-              : addedHint > 0
-                ? `+${addedHint} añadido${addedHint === 1 ? '' : 's'}`
-                : 'Ya estaban todos'}
-          </Button>
         </div>
+      </Card>
+
+      {/* Agregar jugador a mano */}
+      <Card className="p-4 sm:p-5">
+        <h2 className="mb-3 text-sm font-bold text-slate-800 dark:text-slate-100">
+          Agregar jugador
+        </h2>
+        <PlayerForm disabled={atCapacity} onSubmit={addPlayer} />
       </Card>
 
       {/* Contador + validación */}
@@ -234,6 +228,25 @@ export function ConfigPage() {
           onRemove={removePlayer}
           onChangeLevel={(id, level) => updatePlayer(id, { level })}
         />
+
+        {players.length > 0 && (
+          <div className="mt-4 border-t border-slate-100 pt-3 dark:border-slate-800">
+            <Button
+              variant="secondary"
+              size="sm"
+              fullWidth
+              onClick={handleAddToDefault}
+              title="Agrega los jugadores nuevos a la lista por defecto (no la reemplaza)"
+            >
+              <BookmarkPlus className="h-4 w-4" />
+              {addedHint === null
+                ? 'Añadir estos jugadores a la lista por defecto'
+                : addedHint > 0
+                  ? `+${addedHint} añadido${addedHint === 1 ? '' : 's'} a la lista por defecto`
+                  : 'Ya estaban todos en la lista por defecto'}
+            </Button>
+          </div>
+        )}
       </Card>
 
       {/* CTA fija */}
