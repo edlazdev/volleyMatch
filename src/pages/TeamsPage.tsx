@@ -1,5 +1,12 @@
-import { useMemo } from 'react';
-import { DndContext, DragOverlay, closestCorners } from '@dnd-kit/core';
+import { useCallback, useMemo } from 'react';
+import {
+  DndContext,
+  DragOverlay,
+  MeasuringStrategy,
+  closestCorners,
+  pointerWithin,
+} from '@dnd-kit/core';
+import type { CollisionDetection } from '@dnd-kit/core';
 import { RefreshCw, RotateCcw, Swords, Users } from 'lucide-react';
 import { useVolleyStore } from '@/store/useVolleyStore';
 import { useTeamData } from '@/hooks/useTeamData';
@@ -23,6 +30,27 @@ export function TeamsPage() {
 
   const { sensors, activePlayer, handleDragStart, handleDragEnd, handleDragCancel } =
     useTeamDnD(teams, playersById);
+
+  const teamIdSet = useMemo(
+    () => new Set(teams.map((t) => t.id)),
+    [teams],
+  );
+
+  // Con DragOverlay el nodo original no se mueve, así que usamos detección por
+  // puntero (sí sigue al cursor/dedo). Priorizamos los jugadores sobre el
+  // contenedor para no romper el reordenamiento; si el puntero está sobre el
+  // área vacía/cabecera, resuelve al equipo.
+  const collisionDetection = useCallback<CollisionDetection>(
+    (args) => {
+      const collisions = pointerWithin(args);
+      if (collisions.length === 0) return closestCorners(args);
+      const onlyPlayers = collisions.filter(
+        (c) => !teamIdSet.has(String(c.id)),
+      );
+      return onlyPlayers.length > 0 ? onlyPlayers : collisions;
+    },
+    [teamIdSet],
+  );
 
   const teamsById = useMemo(
     () => new Map(teams.map((t) => [t.id, t])),
@@ -83,13 +111,14 @@ export function TeamsPage() {
       />
 
       <p className="text-xs text-slate-500 dark:text-slate-400">
-        Arrastra y suelta jugadores para reorganizar los equipos. Las métricas se
-        actualizan al instante.
+        Arrastra un jugador y suéltalo sobre cualquier parte de otra tarjeta de
+        equipo. En móvil, mantén pulsado un instante para empezar a arrastrar.
       </p>
 
       <DndContext
         sensors={sensors}
-        collisionDetection={closestCorners}
+        collisionDetection={collisionDetection}
+        measuring={{ droppable: { strategy: MeasuringStrategy.Always } }}
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
         onDragCancel={handleDragCancel}

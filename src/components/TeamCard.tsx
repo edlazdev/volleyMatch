@@ -47,6 +47,7 @@ export function TeamCard({
 
   return (
     <div
+      ref={setNodeRef}
       className={cn(
         'flex flex-col overflow-hidden rounded-2xl border bg-white shadow-soft transition-all dark:bg-slate-900',
         isOver
@@ -93,9 +94,8 @@ export function TeamCard({
         </div>
       </div>
 
-      {/* Zona droppable con jugadores */}
+      {/* Lista de jugadores (toda la tarjeta es zona soltable) */}
       <div
-        ref={setNodeRef}
         className={cn(
           'flex flex-1 flex-col gap-2 p-3',
           team.playerIds.length === 0 &&
