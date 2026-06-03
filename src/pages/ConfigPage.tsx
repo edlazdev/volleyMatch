@@ -35,14 +35,14 @@ export function ConfigPage() {
   const clearPlayers = useVolleyStore((s) => s.clearPlayers);
   const generateTeams = useVolleyStore((s) => s.generateTeams);
   const setParticipants = useVolleyStore((s) => s.setParticipants);
-  const saveAsDefault = useVolleyStore((s) => s.saveAsDefault);
+  const mergeIntoDefault = useVolleyStore((s) => s.mergeIntoDefault);
   const defaultRoster = useVolleyStore((s) => s.defaultRoster);
 
   const { players, validation } = useTeamData();
   const [importOpen, setImportOpen] = useState(false);
   const [selectOpen, setSelectOpen] = useState(false);
   const [manageOpen, setManageOpen] = useState(false);
-  const [savedHint, setSavedHint] = useState(false);
+  const [addedHint, setAddedHint] = useState<number | null>(null);
   const [levelFilter, setLevelFilter] = useState<PlayerLevel | null>(null);
 
   /**
@@ -59,10 +59,10 @@ export function ConfigPage() {
     [players, levelFilter],
   );
 
-  const handleSaveDefault = () => {
-    saveAsDefault();
-    setSavedHint(true);
-    window.setTimeout(() => setSavedHint(false), 2200);
+  const handleAddToDefault = () => {
+    const added = mergeIntoDefault(players);
+    setAddedHint(added);
+    window.setTimeout(() => setAddedHint(null), 2400);
   };
 
   const teamOptions = useMemo(
@@ -134,12 +134,16 @@ export function ConfigPage() {
           <Button
             variant="ghost"
             size="sm"
-            onClick={handleSaveDefault}
+            onClick={handleAddToDefault}
             disabled={players.length === 0}
-            title="Guarda los jugadores actuales como tu lista predeterminada"
+            title="Agrega los jugadores nuevos a la lista por defecto (no la reemplaza)"
           >
             <BookmarkPlus className="h-4 w-4" />
-            {savedHint ? '¡Guardada!' : 'Guardar como predeterminada'}
+            {addedHint === null
+              ? 'Añadir a lista por defecto'
+              : addedHint > 0
+                ? `+${addedHint} añadido${addedHint === 1 ? '' : 's'}`
+                : 'Ya estaban todos'}
           </Button>
         </div>
       </Card>

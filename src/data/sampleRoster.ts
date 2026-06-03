@@ -26,4 +26,7 @@ export const SAMPLE_ROSTER: { name: string; level: PlayerLevel }[] = [
   { name: 'Kiana', level: 6 },
   { name: 'Julio', level: 2 },
   { name: 'Napo', level: 2 },
+  { name: 'Anghie', level: 4 },
+  { name: 'Juan Miguel', level: 3 },
+  { name: 'Leyda', level: 3 },
 ];

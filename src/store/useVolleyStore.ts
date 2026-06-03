@@ -59,8 +59,13 @@ interface VolleyState {
   clearPlayers: () => void;
 
   // --- Lista predeterminada ---
-  /** Guarda los jugadores actuales como lista predeterminada. */
+  /** Guarda los jugadores actuales como lista predeterminada (reemplaza). */
   saveAsDefault: () => void;
+  /**
+   * Fusiona entradas en la lista por defecto: agrega solo los nombres que aún
+   * no existen (sin duplicar ni borrar). Devuelve cuántos se agregaron.
+   */
+  mergeIntoDefault: (entries: RosterEntry[]) => number;
   /** Carga la lista predeterminada (o el roster de ejemplo si no hay). */
   loadDefault: () => void;
   /** Vacía la lista a propósito (queda `[]`, se respeta vacía al refrescar). */
@@ -174,6 +179,25 @@ export const useVolleyStore = create<VolleyState>()(
             level,
           })),
         })),
+
+      mergeIntoDefault: (entries) => {
+        const base = get().defaultRoster ?? SAMPLE_ROSTER;
+        const existing = new Set(
+          base.map((e) => e.name.trim().toLowerCase()),
+        );
+        const additions: RosterEntry[] = [];
+        for (const e of entries) {
+          const name = e.name.trim();
+          const key = name.toLowerCase();
+          if (!name || existing.has(key)) continue;
+          existing.add(key);
+          additions.push({ name: name.slice(0, 40), level: e.level });
+        }
+        // Sin nombres nuevos: no materializamos (si era `null` sigue de fábrica).
+        if (additions.length === 0) return 0;
+        set({ defaultRoster: [...base.map((e) => ({ ...e })), ...additions] });
+        return additions.length;
+      },
 
       loadDefault: () => {
         const { defaultRoster, teamCount } = get();
