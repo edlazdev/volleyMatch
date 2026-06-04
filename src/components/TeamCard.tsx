@@ -16,6 +16,8 @@ interface TeamCardProps {
   onRename?: (name: string) => void;
   /** Abre el modal de cambio para un jugador. */
   onSwapPlayer?: (player: Player) => void;
+  /** Jugadores por equipo (para el cupo). */
+  teamSize?: number;
 }
 
 const ACCENTS = [
@@ -37,9 +39,10 @@ export function TeamCard({
   highlight,
   onRename,
   onSwapPlayer,
+  teamSize = PLAYERS_PER_TEAM,
 }: TeamCardProps) {
   const accent = ACCENTS[accentIndex % ACCENTS.length];
-  const isFull = team.playerIds.length >= PLAYERS_PER_TEAM;
+  const isFull = team.playerIds.length >= teamSize;
 
   return (
     <div className="flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-soft transition-all dark:border-slate-800 dark:bg-slate-900">
@@ -77,7 +80,7 @@ export function TeamCard({
           <Metric
             icon={Users}
             label="Jugadores"
-            value={`${metrics.teamPlayerCount}/${PLAYERS_PER_TEAM}`}
+            value={`${metrics.teamPlayerCount}/${teamSize}`}
           />
         </div>
       </div>
@@ -106,7 +109,7 @@ export function TeamCard({
 
         {!isFull && players.length > 0 && (
           <p className="pt-1 text-center text-[11px] text-slate-400 dark:text-slate-500">
-            {PLAYERS_PER_TEAM - players.length} lugar(es) libre(s)
+            {teamSize - players.length} lugar(es) libre(s)
           </p>
         )}
       </div>

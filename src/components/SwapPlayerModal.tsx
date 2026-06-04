@@ -16,6 +16,8 @@ interface SwapPlayerModalProps {
   /** Mueve el jugador a un equipo con cupo libre (sin intercambio). */
   onMove: (teamId: string) => void;
   onClose: () => void;
+  /** Jugadores por equipo (cupo). */
+  teamSize?: number;
 }
 
 interface Candidate {
@@ -32,6 +34,7 @@ export function SwapPlayerModal({
   onSwap,
   onMove,
   onClose,
+  teamSize = PLAYERS_PER_TEAM,
 }: SwapPlayerModalProps) {
   const sourceTeamId = useMemo(() => {
     if (!source) return null;
@@ -42,11 +45,9 @@ export function SwapPlayerModal({
   const teamsWithSpace = useMemo(
     () =>
       teams.filter(
-        (t) =>
-          t.id !== sourceTeamId &&
-          t.playerIds.length < PLAYERS_PER_TEAM,
+        (t) => t.id !== sourceTeamId && t.playerIds.length < teamSize,
       ),
-    [teams, sourceTeamId],
+    [teams, sourceTeamId, teamSize],
   );
 
   // Candidatos: jugadores de OTROS equipos. Primero el mismo nivel, luego el
@@ -112,7 +113,7 @@ export function SwapPlayerModal({
                         {team.name}
                       </span>
                       <span className="shrink-0 text-xs text-slate-400">
-                        {team.playerIds.length}/{PLAYERS_PER_TEAM}
+                        {team.playerIds.length}/{teamSize}
                       </span>
                     </button>
                   </li>

@@ -1,7 +1,10 @@
 import type { LevelDefinition, PlayerLevel } from '@/types';
 
-/** Cantidad de jugadores por equipo en vóley (regla de negocio). */
+/** Cantidad de jugadores por equipo por defecto (vóley indoor). */
 export const PLAYERS_PER_TEAM = 6;
+
+/** Opciones de jugadores por equipo. */
+export const TEAM_SIZE_OPTIONS = [6, 8, 10] as const;
 
 /** Rango permitido de equipos (hasta 16 para torneos). */
 export const MIN_TEAMS = 2;

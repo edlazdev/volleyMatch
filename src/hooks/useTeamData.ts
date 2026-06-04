@@ -23,11 +23,12 @@ export function useTeamData() {
   const players = useVolleyStore((s) => s.players);
   const teams = useVolleyStore((s) => s.teams);
   const teamCount = useVolleyStore((s) => s.teamCount);
+  const teamSize = useVolleyStore((s) => s.teamSize);
 
   const playersById = useMemo(() => indexPlayers(players), [players]);
 
   const validation = useMemo<RosterValidation>(() => {
-    const required = maxPlayersFor(teamCount);
+    const required = maxPlayersFor(teamCount, teamSize);
     const current = players.length;
     const diff = required - current;
     const isValid = diff === 0;
@@ -41,7 +42,7 @@ export function useTeamData() {
     }
 
     return { required, current, isValid, diff, message };
-  }, [players.length, teamCount]);
+  }, [players.length, teamCount, teamSize]);
 
   const metricsByTeam = useMemo<Map<string, TeamMetrics>>(() => {
     return new Map(
