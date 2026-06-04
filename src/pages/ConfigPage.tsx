@@ -173,15 +173,15 @@ export function ConfigPage() {
           tone={validation.isValid ? 'ok' : 'warn'}
         />
 
-        {validation.message ? (
-          <div className="mt-3 flex items-start gap-2 rounded-xl bg-amber-50 px-3 py-2.5 text-sm text-amber-700 dark:bg-amber-950/40 dark:text-amber-300">
-            <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
+        {validation.isValid ? (
+          <div className="mt-3 flex items-center gap-2 rounded-xl bg-emerald-50 px-3 py-2.5 text-sm text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300">
+            <CheckCircle2 className="h-4 w-4 shrink-0" />
             <span>{validation.message}</span>
           </div>
         ) : (
-          <div className="mt-3 flex items-center gap-2 rounded-xl bg-emerald-50 px-3 py-2.5 text-sm text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300">
-            <CheckCircle2 className="h-4 w-4 shrink-0" />
-            <span>¡Listo! Tienes el número exacto de jugadores.</span>
+          <div className="mt-3 flex items-start gap-2 rounded-xl bg-amber-50 px-3 py-2.5 text-sm text-amber-700 dark:bg-amber-950/40 dark:text-amber-300">
+            <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
+            <span>{validation.message}</span>
           </div>
         )}
       </Card>

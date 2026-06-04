@@ -10,11 +10,13 @@ import type { TeamMetrics } from '@/types';
 
 /** Resultado de la validación de la configuración de jugadores. */
 export interface RosterValidation {
+  /** Cupo máximo (equipos × tamaño). */
   required: number;
   current: number;
+  /** Se pueden generar equipos parejos. */
   isValid: boolean;
-  /** Positivo = faltan jugadores, negativo = sobran. */
-  diff: number;
+  /** Jugadores que quedarían por equipo (si es parejo). */
+  perTeam: number;
   message: string | null;
 }
 
@@ -28,20 +30,35 @@ export function useTeamData() {
   const playersById = useMemo(() => indexPlayers(players), [players]);
 
   const validation = useMemo<RosterValidation>(() => {
-    const required = maxPlayersFor(teamCount, teamSize);
+    const required = maxPlayersFor(teamCount, teamSize); // cupo máximo
     const current = players.length;
-    const diff = required - current;
-    const isValid = diff === 0;
+    const perTeam = teamCount > 0 ? Math.floor(current / teamCount) : 0;
+
+    const even = current > 0 && current % teamCount === 0;
+    const withinCap = current <= required;
+    const enough = current >= teamCount; // al menos 1 por equipo
+    const isValid = even && withinCap && enough;
 
     let message: string | null = null;
-    if (diff > 0) {
-      message = `Faltan ${diff} ${diff === 1 ? 'jugador' : 'jugadores'} para completar ${teamCount} equipos.`;
-    } else if (diff < 0) {
-      const extra = Math.abs(diff);
-      message = `Sobran ${extra} ${extra === 1 ? 'jugador' : 'jugadores'}. El máximo es ${required}.`;
+
+    if (current === 0) {
+      message = 'Agrega jugadores para empezar.';
+    } else if (!enough) {
+      message = `Necesitas al menos ${teamCount} jugadores (1 por equipo).`;
+    } else if (!withinCap) {
+      const extra = current - required;
+      message = `Sobran ${extra} ${extra === 1 ? 'jugador' : 'jugadores'}: el máximo es ${required} (${teamSize} por equipo).`;
+    } else if (!even) {
+      const toRemove = current % teamCount;
+      const toAdd = teamCount - toRemove;
+      message = `Para equipos parejos, quita ${toRemove} o agrega ${toAdd} (deben ser múltiplos de ${teamCount}).`;
+    } else if (teamCount === 2) {
+      message = `¡Listo! Pueden jugar ${perTeam} vs ${perTeam}.`;
+    } else {
+      message = `¡Listo! ${perTeam} jugadores por equipo en ${teamCount} equipos.`;
     }
 
-    return { required, current, isValid, diff, message };
+    return { required, current, isValid, perTeam, message };
   }, [players.length, teamCount, teamSize]);
 
   const metricsByTeam = useMemo<Map<string, TeamMetrics>>(() => {
