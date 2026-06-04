@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import {
   DndContext,
   DragOverlay,
@@ -7,13 +7,14 @@ import {
   pointerWithin,
 } from '@dnd-kit/core';
 import type { CollisionDetection } from '@dnd-kit/core';
-import { RefreshCw, RotateCcw, Swords, Users } from 'lucide-react';
+import { ArrowLeftRight, RefreshCw, RotateCcw, Swords, Users } from 'lucide-react';
 import { useVolleyStore } from '@/store/useVolleyStore';
 import { useTeamData } from '@/hooks/useTeamData';
 import { useTeamDnD } from '@/hooks/useTeamDnD';
 import { TeamCard } from '@/components/TeamCard';
 import { BalanceIndicator } from '@/components/BalanceIndicator';
 import { SuggestionCard } from '@/components/SuggestionCard';
+import { SwapPlayerModal } from '@/components/SwapPlayerModal';
 import { PlayerDragOverlay } from '@/components/dnd/PlayerDragOverlay';
 import { Button } from '@/components/ui/Button';
 import { EmptyState } from '@/components/ui/EmptyState';
@@ -23,7 +24,10 @@ export function TeamsPage() {
   const applySuggestion = useVolleyStore((s) => s.applySuggestion);
   const renameTeam = useVolleyStore((s) => s.renameTeam);
   const resetTeamNames = useVolleyStore((s) => s.resetTeamNames);
+  const swapPlayers = useVolleyStore((s) => s.swapPlayers);
   const setScreen = useVolleyStore((s) => s.setScreen);
+
+  const [swapSourceId, setSwapSourceId] = useState<string | null>(null);
 
   const { teams, playersById, metricsByTeam, spread, suggestions } =
     useTeamData();
@@ -111,8 +115,9 @@ export function TeamsPage() {
       />
 
       <p className="text-xs text-slate-500 dark:text-slate-400">
-        Arrastra un jugador y suéltalo sobre cualquier parte de otra tarjeta de
-        equipo. En móvil, mantén pulsado un instante para empezar a arrastrar.
+        Toca el botón <ArrowLeftRight className="inline h-3.5 w-3.5 align-text-bottom" /> de
+        un jugador para cambiarlo por otro (se sugieren los del mismo nivel). El
+        ícono de agarre permite arrastrar como alternativa.
       </p>
 
       <DndContext
@@ -148,6 +153,7 @@ export function TeamsPage() {
                     : null
               }
               onRename={(name) => renameTeam(team.id, name)}
+              onSwapPlayer={(player) => setSwapSourceId(player.id)}
             />
           ))}
         </div>
@@ -168,6 +174,18 @@ export function TeamsPage() {
           Ver enfrentamientos
         </Button>
       </div>
+
+      <SwapPlayerModal
+        open={swapSourceId !== null}
+        source={swapSourceId ? playersById.get(swapSourceId) ?? null : null}
+        teams={teams}
+        playersById={playersById}
+        onSwap={(targetId) => {
+          if (swapSourceId) swapPlayers(swapSourceId, targetId);
+          setSwapSourceId(null);
+        }}
+        onClose={() => setSwapSourceId(null)}
+      />
     </div>
   );
 }

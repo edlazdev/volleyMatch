@@ -16,6 +16,8 @@ interface TeamCardProps {
   highlight?: 'strong' | 'weak' | null;
   /** Renombra el equipo. */
   onRename?: (name: string) => void;
+  /** Abre el modal de cambio para un jugador. */
+  onSwapPlayer?: (player: Player) => void;
 }
 
 const ACCENTS = [
@@ -36,6 +38,7 @@ export function TeamCard({
   accentIndex,
   highlight,
   onRename,
+  onSwapPlayer,
 }: TeamCardProps) {
   const { setNodeRef, isOver } = useDroppable({
     id: team.id,
@@ -116,6 +119,9 @@ export function TeamCard({
                 key={player.id}
                 player={player}
                 teamId={team.id}
+                onSwap={
+                  onSwapPlayer ? () => onSwapPlayer(player) : undefined
+                }
               />
             ))
           )}
