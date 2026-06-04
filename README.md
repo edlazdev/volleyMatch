@@ -6,7 +6,7 @@ Aplicación web **mobile first** para formar **equipos de vóley equilibrados** 
 
 - **Configuración flexible**: 2 a 16 equipos (6 jugadores por equipo) — ideal para torneos.
 - **Modo torneo**: enfrentamientos en **todos contra todos** o **llaves de eliminación** con avance hasta el **campeón 🏆** (siembra por nivel y byes automáticos).
-- **Niveles con temática de pollito 🐤**: el nivel se representa con esa cantidad de pollitos (1 = 🐤 … 6 = 🐤🐤🐤🐤🐤🐤). El nombre del nivel aparece como tooltip.
+- **Niveles por letra (A–F)**: A = más alto (Competitivo) … F = más bajo (Principiante), con color por nivel y el nombre como tooltip.
 - **Arma tu lista** de varias formas:
   - **Elegir participantes** desde un pozo con checkboxes (avisa si faltan para el cupo).
   - **Editar lista por defecto** (CRUD): agregar, editar, eliminar, vaciar (con confirmación) y restaurar.
@@ -71,18 +71,18 @@ src/
 6. `generateMatches()` — round robin de enfrentamientos.
 7. `buildBracket()` — llave de eliminación simple (siembra por fuerza + byes); `setBracketWinner()` avanza ganadores hasta la copa.
 
-## 🐤 Niveles
+## 🏷️ Niveles
 
-> Escala invertida: **1 es el nivel más alto** y 6 el más bajo. El nivel se muestra como esa cantidad de pollitos.
+> El nivel se muestra como una **letra** (A = más alto, F = más bajo) para entenderlo de un vistazo. El nombre completo aparece como tooltip.
 
-| Nivel | Pollitos          | Descripción      |
-| ----- | ----------------- | ---------------- |
-| 1     | 🐤                | Competitivo      |
-| 2     | 🐤🐤              | Avanzado         |
-| 3     | 🐤🐤🐤            | Intermedio Alto  |
-| 4     | 🐤🐤🐤🐤          | Intermedio       |
-| 5     | 🐤🐤🐤🐤🐤        | Básico           |
-| 6     | 🐤🐤🐤🐤🐤🐤      | Principiante     |
+| Letra | Descripción      |
+| ----- | ---------------- |
+| A     | Competitivo      |
+| B     | Avanzado         |
+| C     | Intermedio Alto  |
+| D     | Intermedio       |
+| E     | Básico           |
+| F     | Principiante     |
 
 ## 🔄 Lista por defecto (pozo) vs. participantes
 

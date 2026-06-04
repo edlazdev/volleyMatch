@@ -1,6 +1,6 @@
 import { Trash2, Users } from 'lucide-react';
 import type { Player, PlayerLevel } from '@/types';
-import { LEVELS, LEVEL_SELECT_CLASS, chicks, getLevel } from '@/data/levels';
+import { LEVELS, LEVEL_SELECT_CLASS, getLevel, levelCode } from '@/data/levels';
 import { Select } from '@/components/ui/Select';
 import { EmptyState } from '@/components/ui/EmptyState';
 
@@ -52,7 +52,7 @@ export function PlayerList({
             >
               {LEVELS.map((lvl) => (
                 <option key={lvl.value} value={lvl.value} title={lvl.label}>
-                  {chicks(lvl.value)}
+                  {levelCode(lvl.value)} · {lvl.label}
                 </option>
               ))}
             </Select>

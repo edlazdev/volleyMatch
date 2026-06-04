@@ -66,12 +66,12 @@ export function getLevel(level: PlayerLevel): LevelDefinition {
   return LEVEL_MAP.get(level) ?? LEVELS[0];
 }
 
-/** Emoji de pollito usado como unidad de nivel. */
-export const CHICK = '🐤';
+/** Letras de nivel: A = más alto (nivel 1) … F = más bajo (nivel 6). */
+const LEVEL_LETTERS = ['A', 'B', 'C', 'D', 'E', 'F'];
 
-/** Representa el nivel como N pollitos (1 → 🐤, 2 → 🐤🐤, …). */
-export function chicks(level: PlayerLevel): string {
-  return CHICK.repeat(level);
+/** Código de nivel como letra (1 → A, 2 → B, …, 6 → F). */
+export function levelCode(level: PlayerLevel): string {
+  return LEVEL_LETTERS[level - 1] ?? '?';
 }
 
 /**

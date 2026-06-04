@@ -4,7 +4,7 @@ import {
   LEVELS,
   LEVEL_ACTIVE_CARD_CLASS,
   LEVEL_SOFT_CARD_CLASS,
-  chicks,
+  levelCode,
 } from '@/data/levels';
 import { cn } from '@/utils/cn';
 
@@ -56,18 +56,18 @@ export function LevelCounts({ players, selected, onSelect }: LevelCountsProps) {
             )}
             title={
               interactive
-                ? `Nivel ${lvl.value} · ${lvl.label} (filtrar)`
-                : `Nivel ${lvl.value} · ${lvl.label}`
+                ? `Nivel ${levelCode(lvl.value)} · ${lvl.label} (filtrar)`
+                : `Nivel ${levelCode(lvl.value)} · ${lvl.label}`
             }
           >
             <span
               className={cn(
-                'inline-flex max-w-full flex-wrap items-center justify-center gap-0 rounded-full px-1.5 py-0.5 text-[11px] leading-none',
+                'inline-flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold leading-none',
                 lvl.badgeClass,
               )}
-              title={`Nivel ${lvl.value}`}
+              title={`Nivel ${levelCode(lvl.value)} · ${lvl.label}`}
             >
-              {chicks(lvl.value)}
+              {levelCode(lvl.value)}
             </span>
             <span className="mt-1 text-lg font-extrabold leading-none tabular-nums text-slate-800 dark:text-slate-100">
               {count}

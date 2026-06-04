@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Select } from '@/components/ui/Select';
 import { EmptyState } from '@/components/ui/EmptyState';
-import { LEVELS, LEVEL_SELECT_CLASS, chicks, getLevel } from '@/data/levels';
+import { LEVELS, LEVEL_SELECT_CLASS, getLevel, levelCode } from '@/data/levels';
 import { SAMPLE_ROSTER } from '@/data/sampleRoster';
 import { useVolleyStore } from '@/store/useVolleyStore';
 import type { PlayerLevel } from '@/types';
@@ -95,7 +95,7 @@ export function ManageRosterModal({ open, onClose }: ManageRosterModalProps) {
             >
               {LEVELS.map((l) => (
                 <option key={l.value} value={l.value} title={l.label}>
-                  {chicks(l.value)}
+                  {levelCode(l.value)} · {l.label}
                 </option>
               ))}
             </Select>
@@ -181,7 +181,7 @@ export function ManageRosterModal({ open, onClose }: ManageRosterModalProps) {
                   >
                     {LEVELS.map((l) => (
                       <option key={l.value} value={l.value} title={l.label}>
-                        {chicks(l.value)}
+                        {levelCode(l.value)} · {l.label}
                       </option>
                     ))}
                   </Select>

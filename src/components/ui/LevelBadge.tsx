@@ -1,5 +1,5 @@
 import type { PlayerLevel } from '@/types';
-import { chicks, getLevel } from '@/data/levels';
+import { getLevel, levelCode } from '@/data/levels';
 import { cn } from '@/utils/cn';
 
 interface LevelBadgeProps {
@@ -22,10 +22,10 @@ export function LevelBadge({
         def.badgeClass,
         className,
       )}
-      title={`${def.shortLabel} · ${def.label}`}
-      aria-label={`Nivel ${level}: ${def.label}`}
+      title={`Nivel ${levelCode(level)} · ${def.label}`}
+      aria-label={`Nivel ${levelCode(level)}: ${def.label}`}
     >
-      <span className="leading-none tracking-tight">{chicks(level)}</span>
+      <span className="font-bold leading-none">{levelCode(level)}</span>
       {showLabel && <span className="hidden sm:inline">· {def.label}</span>}
     </span>
   );
