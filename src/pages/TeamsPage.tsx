@@ -20,8 +20,6 @@ export function TeamsPage() {
 
   const [swapSourceId, setSwapSourceId] = useState<string | null>(null);
 
-  const teamSize = useVolleyStore((s) => s.teamSize);
-
   const { teams, playersById, metricsByTeam, spread, suggestions } =
     useTeamData();
 
@@ -114,7 +112,6 @@ export function TeamsPage() {
             }
             onRename={(name) => renameTeam(team.id, name)}
             onSwapPlayer={(player) => setSwapSourceId(player.id)}
-            teamSize={teamSize}
           />
         ))}
       </div>
@@ -144,7 +141,6 @@ export function TeamsPage() {
           if (swapSourceId) movePlayer(swapSourceId, teamId);
           setSwapSourceId(null);
         }}
-        teamSize={teamSize}
         onClose={() => setSwapSourceId(null)}
       />
     </div>

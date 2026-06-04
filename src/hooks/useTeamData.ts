@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { useVolleyStore, maxPlayersFor } from '@/store/useVolleyStore';
+import { PLAYERS_PER_TEAM } from '@/data/levels';
 import {
   calculateSpread,
   calculateTeamMetrics,
@@ -25,7 +26,7 @@ export function useTeamData() {
   const players = useVolleyStore((s) => s.players);
   const teams = useVolleyStore((s) => s.teams);
   const teamCount = useVolleyStore((s) => s.teamCount);
-  const teamSize = useVolleyStore((s) => s.teamSize);
+  const teamSize = PLAYERS_PER_TEAM;
 
   const playersById = useMemo(() => indexPlayers(players), [players]);
 

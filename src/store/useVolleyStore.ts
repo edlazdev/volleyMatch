@@ -39,8 +39,6 @@ function rostersEqual(a: RosterEntry[], b: RosterEntry[]): boolean {
 interface VolleyState {
   // --- Estado ---
   teamCount: number;
-  /** Jugadores por equipo (6, 8 o 10). */
-  teamSize: number;
   players: Player[];
   teams: Team[];
   matches: Match[];
@@ -59,7 +57,6 @@ interface VolleyState {
 
   // --- Configuración ---
   setTeamCount: (count: number) => void;
-  setTeamSize: (size: number) => void;
   setScreen: (screen: Screen) => void;
 
   // --- Jugadores ---
@@ -165,7 +162,6 @@ export const useVolleyStore = create<VolleyState>()(
   persist(
     (set, get) => ({
       teamCount: 2,
-      teamSize: PLAYERS_PER_TEAM,
       players: [],
       teams: [],
       matches: [],
@@ -177,8 +173,6 @@ export const useVolleyStore = create<VolleyState>()(
       setTeamCount: (count) =>
         set({ teamCount: clampTeamCount(count) }),
 
-      setTeamSize: (size) => set({ teamSize: size }),
-
       setScreen: (screen) => set({ screen }),
 
       addPlayer: (name, level) => {
@@ -189,8 +183,8 @@ export const useVolleyStore = create<VolleyState>()(
       },
 
       addPlayers: (entries) => {
-        const { players, teamCount, teamSize } = get();
-        const capacity = maxPlayersFor(teamCount, teamSize);
+        const { players, teamCount } = get();
+        const capacity = maxPlayersFor(teamCount);
         const room = Math.max(0, capacity - players.length);
         if (room === 0) return 0;
 
@@ -245,12 +239,12 @@ export const useVolleyStore = create<VolleyState>()(
       },
 
       loadDefault: () => {
-        const { defaultRoster, teamCount, teamSize } = get();
+        const { defaultRoster, teamCount } = get();
         const source =
           defaultRoster && defaultRoster.length > 0
             ? defaultRoster
             : SAMPLE_ROSTER;
-        const capacity = maxPlayersFor(teamCount, teamSize);
+        const capacity = maxPlayersFor(teamCount);
         const players = source.slice(0, capacity).map<Player>((e) => ({
           id: createId(),
           name: e.name,
@@ -429,7 +423,6 @@ export const useVolleyStore = create<VolleyState>()(
       reset: () =>
         set({
           teamCount: 2,
-          teamSize: PLAYERS_PER_TEAM,
           players: [],
           teams: [],
           matches: [],
@@ -459,7 +452,6 @@ export const useVolleyStore = create<VolleyState>()(
       // Persistimos solo el dominio; nada de estado derivado de UI volátil.
       partialize: (state) => ({
         teamCount: state.teamCount,
-        teamSize: state.teamSize,
         players: state.players,
         teams: state.teams,
         matches: state.matches,

@@ -11,18 +11,12 @@ import {
 } from 'lucide-react';
 import { useVolleyStore, maxPlayersFor } from '@/store/useVolleyStore';
 import { useTeamData } from '@/hooks/useTeamData';
-import {
-  MAX_TEAMS,
-  MIN_TEAMS,
-  TEAM_SIZE_OPTIONS,
-  getLevel,
-} from '@/data/levels';
+import { MAX_TEAMS, MIN_TEAMS, getLevel } from '@/data/levels';
 import { SAMPLE_ROSTER } from '@/data/sampleRoster';
 import type { PlayerLevel } from '@/types';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Stepper } from '@/components/ui/Stepper';
-import { SegmentedControl } from '@/components/ui/SegmentedControl';
 import { ProgressBar } from '@/components/ui/ProgressBar';
 import { PlayerForm } from '@/components/PlayerForm';
 import { PlayerList } from '@/components/PlayerList';
@@ -34,8 +28,6 @@ import { ManageRosterModal } from '@/components/ManageRosterModal';
 export function ConfigPage() {
   const teamCount = useVolleyStore((s) => s.teamCount);
   const setTeamCount = useVolleyStore((s) => s.setTeamCount);
-  const teamSize = useVolleyStore((s) => s.teamSize);
-  const setTeamSize = useVolleyStore((s) => s.setTeamSize);
   const addPlayer = useVolleyStore((s) => s.addPlayer);
   const addPlayers = useVolleyStore((s) => s.addPlayers);
   const removePlayer = useVolleyStore((s) => s.removePlayer);
@@ -73,7 +65,7 @@ export function ConfigPage() {
     window.setTimeout(() => setAddedHint(null), 2400);
   };
 
-  const maxPlayers = maxPlayersFor(teamCount, teamSize);
+  const maxPlayers = maxPlayersFor(teamCount);
   const atCapacity = players.length >= maxPlayers;
 
   return (
@@ -86,11 +78,11 @@ export function ConfigPage() {
               Cantidad de equipos
             </h2>
             <p className="text-xs text-slate-500 dark:text-slate-400">
-              Se necesitan {teamSize} jugadores por equipo.
+              Hasta 6 jugadores por equipo (pueden ser menos, pero parejos).
             </p>
           </div>
           <span className="rounded-full bg-brand-50 px-2.5 py-1 text-xs font-bold text-brand-700 dark:bg-brand-950 dark:text-brand-300">
-            {maxPlayers} jugadores
+            máx. {maxPlayers}
           </span>
         </div>
         <Stepper
@@ -100,20 +92,6 @@ export function ConfigPage() {
           onChange={setTeamCount}
           suffix="equipos"
         />
-
-        <div className="mt-4">
-          <p className="mb-1.5 text-xs font-semibold text-slate-500 dark:text-slate-400">
-            Jugadores por equipo
-          </p>
-          <SegmentedControl
-            value={teamSize}
-            options={TEAM_SIZE_OPTIONS.map((n) => ({
-              value: n,
-              label: `${n}`,
-            }))}
-            onChange={setTeamSize}
-          />
-        </div>
       </Card>
 
       {/* Armar la lista (acciones previas a agregar a mano) */}

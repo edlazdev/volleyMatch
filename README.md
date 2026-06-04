@@ -4,7 +4,7 @@ Aplicación web **mobile first** para formar **equipos de vóley equilibrados** 
 
 ## ✨ Características
 
-- **Configuración flexible**: 2 a 16 equipos y **6, 8 o 10 jugadores por equipo** — ideal para torneos.
+- **Configuración flexible**: 2 a 16 equipos, **máximo 6 por equipo** (6 vs 6). Permite equipos parejos con menos (4v4, 5v5…). Ideal para torneos.
 - **Modo torneo**: enfrentamientos en **todos contra todos** o **llaves de eliminación** con avance hasta el **campeón 🏆** (siembra por nivel y byes automáticos).
 - **Niveles por letra (A–F)**: A = más alto (Competitivo) … F = más bajo (Principiante), con color por nivel y el nombre como tooltip.
 - **Arma tu lista** de varias formas:
