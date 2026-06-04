@@ -40,7 +40,7 @@ export function PlayerList({
             {player.name}
           </span>
 
-          <div className="w-40 shrink-0">
+          <div className="w-20 shrink-0">
             <Select
               value={player.level}
               onChange={(e) =>
@@ -52,7 +52,7 @@ export function PlayerList({
             >
               {LEVELS.map((lvl) => (
                 <option key={lvl.value} value={lvl.value} title={lvl.label}>
-                  {levelCode(lvl.value)} · {lvl.label}
+                  {levelCode(lvl.value)}
                 </option>
               ))}
             </Select>

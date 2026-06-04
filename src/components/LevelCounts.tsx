@@ -72,6 +72,9 @@ export function LevelCounts({ players, selected, onSelect }: LevelCountsProps) {
             <span className="mt-1 text-lg font-extrabold leading-none tabular-nums text-slate-800 dark:text-slate-100">
               {count}
             </span>
+            <span className="mt-0.5 truncate text-[10px] font-medium leading-tight text-slate-500 dark:text-slate-400">
+              {levelCode(lvl.value)} · {lvl.label}
+            </span>
           </button>
         );
       })}

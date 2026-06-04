@@ -56,7 +56,7 @@ export function PlayerForm({ disabled, onSubmit }: PlayerFormProps) {
           />
         </div>
 
-        <div className="sm:w-44">
+        <div className="sm:w-24">
           <label className="mb-1.5 block text-xs font-semibold text-slate-500 dark:text-slate-400">
             Nivel
           </label>
@@ -68,7 +68,7 @@ export function PlayerForm({ disabled, onSubmit }: PlayerFormProps) {
           >
             {LEVELS.map((lvl) => (
               <option key={lvl.value} value={lvl.value} title={lvl.label}>
-                {levelCode(lvl.value)} · {lvl.label}
+                {levelCode(lvl.value)}
               </option>
             ))}
           </Select>
