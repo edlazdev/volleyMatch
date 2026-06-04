@@ -25,6 +25,7 @@ export function TeamsPage() {
   const renameTeam = useVolleyStore((s) => s.renameTeam);
   const resetTeamNames = useVolleyStore((s) => s.resetTeamNames);
   const swapPlayers = useVolleyStore((s) => s.swapPlayers);
+  const movePlayer = useVolleyStore((s) => s.movePlayer);
   const setScreen = useVolleyStore((s) => s.setScreen);
 
   const [swapSourceId, setSwapSourceId] = useState<string | null>(null);
@@ -182,6 +183,10 @@ export function TeamsPage() {
         playersById={playersById}
         onSwap={(targetId) => {
           if (swapSourceId) swapPlayers(swapSourceId, targetId);
+          setSwapSourceId(null);
+        }}
+        onMove={(teamId) => {
+          if (swapSourceId) movePlayer(swapSourceId, teamId);
           setSwapSourceId(null);
         }}
         onClose={() => setSwapSourceId(null)}

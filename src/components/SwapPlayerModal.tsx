@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
-import { ArrowLeftRight, Sparkles } from 'lucide-react';
+import { ArrowLeftRight, ArrowRight, Sparkles } from 'lucide-react';
 import type { Player, Team } from '@/types';
+import { PLAYERS_PER_TEAM } from '@/data/levels';
 import { Modal } from '@/components/ui/Modal';
 import { LevelBadge } from '@/components/ui/LevelBadge';
 import { cn } from '@/utils/cn';
@@ -12,6 +13,8 @@ interface SwapPlayerModalProps {
   teams: Team[];
   playersById: Map<string, Player>;
   onSwap: (targetId: string) => void;
+  /** Mueve el jugador a un equipo con cupo libre (sin intercambio). */
+  onMove: (teamId: string) => void;
   onClose: () => void;
 }
 
@@ -27,12 +30,24 @@ export function SwapPlayerModal({
   teams,
   playersById,
   onSwap,
+  onMove,
   onClose,
 }: SwapPlayerModalProps) {
   const sourceTeamId = useMemo(() => {
     if (!source) return null;
     return teams.find((t) => t.playerIds.includes(source.id))?.id ?? null;
   }, [teams, source]);
+
+  // Equipos con cupo libre (para mover sin intercambiar).
+  const teamsWithSpace = useMemo(
+    () =>
+      teams.filter(
+        (t) =>
+          t.id !== sourceTeamId &&
+          t.playerIds.length < PLAYERS_PER_TEAM,
+      ),
+    [teams, sourceTeamId],
+  );
 
   // Candidatos: jugadores de OTROS equipos. Primero el mismo nivel, luego el
   // resto ordenado por cercanía de nivel y nombre.
@@ -80,6 +95,32 @@ export function SwapPlayerModal({
             <LevelBadge level={source.level} className="ml-auto" />
           </div>
 
+          {teamsWithSpace.length > 0 && (
+            <div>
+              <p className="mb-2 text-xs font-semibold text-slate-500 dark:text-slate-400">
+                Mover a un equipo con cupo
+              </p>
+              <ul className="space-y-1.5">
+                {teamsWithSpace.map((team) => (
+                  <li key={team.id}>
+                    <button
+                      onClick={() => onMove(team.id)}
+                      className="flex w-full items-center gap-3 rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-left transition-all hover:border-brand-300 hover:bg-brand-50/50 dark:border-slate-700 dark:bg-slate-950 dark:hover:border-brand-700 dark:hover:bg-brand-950/30"
+                    >
+                      <ArrowRight className="h-4 w-4 shrink-0 text-brand-500" />
+                      <span className="min-w-0 flex-1 truncate text-sm font-medium text-slate-800 dark:text-slate-100">
+                        {team.name}
+                      </span>
+                      <span className="shrink-0 text-xs text-slate-400">
+                        {team.playerIds.length}/{PLAYERS_PER_TEAM}
+                      </span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
           {sameLevel.length > 0 && (
             <Section
               icon
@@ -95,11 +136,13 @@ export function SwapPlayerModal({
             onPick={onSwap}
           />
 
-          {sameLevel.length === 0 && others.length === 0 && (
-            <p className="py-6 text-center text-sm text-slate-400">
-              No hay otros jugadores para intercambiar.
-            </p>
-          )}
+          {sameLevel.length === 0 &&
+            others.length === 0 &&
+            teamsWithSpace.length === 0 && (
+              <p className="py-6 text-center text-sm text-slate-400">
+                No hay otros equipos ni jugadores disponibles.
+              </p>
+            )}
         </div>
       )}
     </Modal>
