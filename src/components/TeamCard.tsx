@@ -1,8 +1,6 @@
-import { useDroppable } from '@dnd-kit/core';
-import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { Pencil, Sigma, TrendingUp, Users } from 'lucide-react';
 import type { Player, Team, TeamMetrics } from '@/types';
-import { SortablePlayer } from '@/components/dnd/SortablePlayer';
+import { PlayerRow } from '@/components/PlayerRow';
 import { PLAYERS_PER_TEAM } from '@/data/levels';
 import { cn } from '@/utils/cn';
 
@@ -40,24 +38,11 @@ export function TeamCard({
   onRename,
   onSwapPlayer,
 }: TeamCardProps) {
-  const { setNodeRef, isOver } = useDroppable({
-    id: team.id,
-    data: { type: 'team', teamId: team.id },
-  });
-
   const accent = ACCENTS[accentIndex % ACCENTS.length];
   const isFull = team.playerIds.length >= PLAYERS_PER_TEAM;
 
   return (
-    <div
-      ref={setNodeRef}
-      className={cn(
-        'flex flex-col overflow-hidden rounded-2xl border bg-white shadow-soft transition-all dark:bg-slate-900',
-        isOver
-          ? 'border-brand-400 ring-2 ring-brand-400/40 dark:border-brand-500'
-          : 'border-slate-200 dark:border-slate-800',
-      )}
-    >
+    <div className="flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-soft transition-all dark:border-slate-800 dark:bg-slate-900">
       {/* Cabecera con acento de color */}
       <div className={cn('bg-gradient-to-r px-4 py-3 text-white', accent)}>
         <div className="flex items-center gap-2">
@@ -97,7 +82,7 @@ export function TeamCard({
         </div>
       </div>
 
-      {/* Lista de jugadores (toda la tarjeta es zona soltable) */}
+      {/* Lista de jugadores */}
       <div
         className={cn(
           'flex flex-1 flex-col gap-2 p-3',
@@ -105,27 +90,19 @@ export function TeamCard({
             'items-center justify-center text-center',
         )}
       >
-        <SortableContext
-          items={team.playerIds}
-          strategy={verticalListSortingStrategy}
-        >
-          {players.length === 0 ? (
-            <p className="py-6 text-xs text-slate-400 dark:text-slate-500">
-              Arrastra jugadores aquí
-            </p>
-          ) : (
-            players.map((player) => (
-              <SortablePlayer
-                key={player.id}
-                player={player}
-                teamId={team.id}
-                onSwap={
-                  onSwapPlayer ? () => onSwapPlayer(player) : undefined
-                }
-              />
-            ))
-          )}
-        </SortableContext>
+        {players.length === 0 ? (
+          <p className="py-6 text-xs text-slate-400 dark:text-slate-500">
+            Sin jugadores
+          </p>
+        ) : (
+          players.map((player) => (
+            <PlayerRow
+              key={player.id}
+              player={player}
+              onSwap={onSwapPlayer ? () => onSwapPlayer(player) : undefined}
+            />
+          ))
+        )}
 
         {!isFull && players.length > 0 && (
           <p className="pt-1 text-center text-[11px] text-slate-400 dark:text-slate-500">

@@ -17,7 +17,7 @@ Aplicación web **mobile first** para formar **equipos de vóley equilibrados** 
 - **Métricas por equipo**: nivel promedio, nivel total y conteo de jugadores.
 - **Indicador de equilibrio** y **sugerencias automáticas de intercambio**.
 - **Distribución por nivel** con tarjetas-contador que además **filtran** la lista al tocarlas.
-- **Drag & Drop** (mouse, touch, tablet y teclado) con [dnd-kit](https://dndkit.com).
+- **Reorganizar equipos** con un botón de cambio por jugador (intercambiar o mover a un equipo con cupo), priorizando candidatos del mismo nivel.
 - **Enfrentamientos** generados automáticamente (round robin).
 - **Layout responsive**: la lista de jugadores pasa a 2 columnas en tablet/desktop.
 - **Modo claro / oscuro**.
@@ -25,7 +25,7 @@ Aplicación web **mobile first** para formar **equipos de vóley equilibrados** 
 
 ## 🧱 Stack
 
-React 18 · TypeScript (estricto) · Vite · Tailwind CSS · Zustand · React Hook Form · dnd-kit · Lucide React.
+React 18 · TypeScript (estricto) · Vite · Tailwind CSS · Zustand · React Hook Form · Lucide React.
 
 ## 🚀 Cómo ejecutar
 
@@ -48,9 +48,8 @@ npm run lint      # Chequeo de tipos (tsc --noEmit)
 
 ```text
 src/
-├── components/      # Componentes (UI + dominio + dnd)
-│   ├── ui/          # Button, Card, Input, Select, Modal, badges…
-│   └── dnd/         # Piezas de drag & drop
+├── components/      # Componentes (UI + dominio)
+│   └── ui/          # Button, Card, Input, Select, Modal, Stepper…
 ├── pages/           # ConfigPage, TeamsPage, MatchesPage
 ├── layouts/         # AppLayout (header, navegación, footer)
 ├── hooks/           # useTheme, useTeamData, useTeamDnD

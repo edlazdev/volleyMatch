@@ -1,21 +1,11 @@
-import { useCallback, useMemo, useState } from 'react';
-import {
-  DndContext,
-  DragOverlay,
-  MeasuringStrategy,
-  closestCorners,
-  pointerWithin,
-} from '@dnd-kit/core';
-import type { CollisionDetection } from '@dnd-kit/core';
-import { ArrowLeftRight, RefreshCw, RotateCcw, Swords, Users } from 'lucide-react';
+import { useMemo, useState } from 'react';
+import { RefreshCw, RotateCcw, Swords, Users } from 'lucide-react';
 import { useVolleyStore } from '@/store/useVolleyStore';
 import { useTeamData } from '@/hooks/useTeamData';
-import { useTeamDnD } from '@/hooks/useTeamDnD';
 import { TeamCard } from '@/components/TeamCard';
 import { BalanceIndicator } from '@/components/BalanceIndicator';
 import { SuggestionCard } from '@/components/SuggestionCard';
 import { SwapPlayerModal } from '@/components/SwapPlayerModal';
-import { PlayerDragOverlay } from '@/components/dnd/PlayerDragOverlay';
 import { Button } from '@/components/ui/Button';
 import { EmptyState } from '@/components/ui/EmptyState';
 
@@ -32,30 +22,6 @@ export function TeamsPage() {
 
   const { teams, playersById, metricsByTeam, spread, suggestions } =
     useTeamData();
-
-  const { sensors, activePlayer, handleDragStart, handleDragEnd, handleDragCancel } =
-    useTeamDnD(teams, playersById);
-
-  const teamIdSet = useMemo(
-    () => new Set(teams.map((t) => t.id)),
-    [teams],
-  );
-
-  // Con DragOverlay el nodo original no se mueve, así que usamos detección por
-  // puntero (sí sigue al cursor/dedo). Priorizamos los jugadores sobre el
-  // contenedor para no romper el reordenamiento; si el puntero está sobre el
-  // área vacía/cabecera, resuelve al equipo.
-  const collisionDetection = useCallback<CollisionDetection>(
-    (args) => {
-      const collisions = pointerWithin(args);
-      if (collisions.length === 0) return closestCorners(args);
-      const onlyPlayers = collisions.filter(
-        (c) => !teamIdSet.has(String(c.id)),
-      );
-      return onlyPlayers.length > 0 ? onlyPlayers : collisions;
-    },
-    [teamIdSet],
-  );
 
   const teamsById = useMemo(
     () => new Map(teams.map((t) => [t.id, t])),
@@ -116,53 +82,39 @@ export function TeamsPage() {
       />
 
       <p className="text-xs text-slate-500 dark:text-slate-400">
-        Toca el botón <ArrowLeftRight className="inline h-3.5 w-3.5 align-text-bottom" /> de
-        un jugador para cambiarlo por otro (se sugieren los del mismo nivel). El
-        ícono de agarre permite arrastrar como alternativa.
+        Usa el botón de cambio de cada jugador para intercambiarlo o moverlo a
+        otro equipo. Se sugieren primero los del mismo nivel.
       </p>
 
-      <DndContext
-        sensors={sensors}
-        collisionDetection={collisionDetection}
-        measuring={{ droppable: { strategy: MeasuringStrategy.Always } }}
-        onDragStart={handleDragStart}
-        onDragEnd={handleDragEnd}
-        onDragCancel={handleDragCancel}
-      >
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {teams.map((team, index) => (
-            <TeamCard
-              key={team.id}
-              team={team}
-              players={team.playerIds
-                .map((id) => playersById.get(id))
-                .filter((p): p is NonNullable<typeof p> => Boolean(p))}
-              metrics={
-                metricsByTeam.get(team.id) ?? {
-                  teamId: team.id,
-                  teamPlayerCount: 0,
-                  teamTotalLevel: 0,
-                  teamAverageLevel: 0,
-                }
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {teams.map((team, index) => (
+          <TeamCard
+            key={team.id}
+            team={team}
+            players={team.playerIds
+              .map((id) => playersById.get(id))
+              .filter((p): p is NonNullable<typeof p> => Boolean(p))}
+            metrics={
+              metricsByTeam.get(team.id) ?? {
+                teamId: team.id,
+                teamPlayerCount: 0,
+                teamTotalLevel: 0,
+                teamAverageLevel: 0,
               }
-              accentIndex={index}
-              highlight={
-                team.id === strongId
-                  ? 'strong'
-                  : team.id === weakId
-                    ? 'weak'
-                    : null
-              }
-              onRename={(name) => renameTeam(team.id, name)}
-              onSwapPlayer={(player) => setSwapSourceId(player.id)}
-            />
-          ))}
-        </div>
-
-        <DragOverlay dropAnimation={null}>
-          {activePlayer ? <PlayerDragOverlay player={activePlayer} /> : null}
-        </DragOverlay>
-      </DndContext>
+            }
+            accentIndex={index}
+            highlight={
+              team.id === strongId
+                ? 'strong'
+                : team.id === weakId
+                  ? 'weak'
+                  : null
+            }
+            onRename={(name) => renameTeam(team.id, name)}
+            onSwapPlayer={(player) => setSwapSourceId(player.id)}
+          />
+        ))}
+      </div>
 
       <div className="sticky bottom-4 z-20 pt-2">
         <Button
