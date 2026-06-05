@@ -167,7 +167,7 @@ export const useVolleyStore = create<VolleyState>()(
       matches: [],
       bracket: [],
       format: 'round-robin',
-      screen: 'config',
+      screen: 'landing',
       defaultRoster: null,
 
       setTeamCount: (count) =>

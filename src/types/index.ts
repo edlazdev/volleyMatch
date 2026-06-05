@@ -65,7 +65,7 @@ export interface BracketMatch {
 }
 
 /** Pantallas / pasos de la aplicación. */
-export type Screen = 'config' | 'teams' | 'matches';
+export type Screen = 'landing' | 'config' | 'teams' | 'matches';
 
 /** Definición visual de un nivel. */
 export interface LevelDefinition {

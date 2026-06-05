@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" font-family="Inter, system-ui, Segoe UI, Roboto, sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1b5cf5" />
+      <stop offset="1" stop-color="#327dff" />
+    </linearGradient>
+    <radialGradient id="glow" cx="0.8" cy="0.1" r="0.9">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.18" />
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)" />
+  <rect width="1200" height="630" fill="url(#glow)" />
+
+  <!-- Logo chip -->
+  <g transform="translate(96,110)">
+    <rect width="96" height="96" rx="24" fill="#ffffff" />
+    <g transform="translate(20,20)" fill="none" stroke="#1b5cf5" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="28" cy="28" r="26" />
+      <path d="M28 2a36 36 0 0 0 0 52 36 36 0 0 0 0-52" />
+      <path d="M2 28h52" />
+    </g>
+  </g>
+
+  <text x="216" y="150" font-size="40" font-weight="800" fill="#ffffff">Volley<tspan fill="#d9eaff">Match</tspan></text>
+  <text x="216" y="188" font-size="22" font-weight="600" fill="#eef6ff" opacity="0.92">Equipos de vóley equilibrados · Balanced volleyball teams</text>
+
+  <!-- Headline -->
+  <text x="96" y="320" font-size="64" font-weight="800" fill="#ffffff">Equipos parejos por nivel,</text>
+  <text x="96" y="396" font-size="64" font-weight="800" fill="#ffffff">torneos y <tspan fill="#ffd76a">llaves hasta la copa</tspan> 🏆</text>
+
+  <!-- Level badges A–F -->
+  <g transform="translate(96,470)" font-size="26" font-weight="800" text-anchor="middle">
+    <g><rect width="64" height="48" rx="14" fill="#fecdd3" /><text x="32" y="32" fill="#9f1239">A</text></g>
+    <g transform="translate(76,0)"><rect width="64" height="48" rx="14" fill="#fed7aa" /><text x="32" y="32" fill="#9a3412">B</text></g>
+    <g transform="translate(152,0)"><rect width="64" height="48" rx="14" fill="#fde68a" /><text x="32" y="32" fill="#92400e">C</text></g>
+    <g transform="translate(228,0)"><rect width="64" height="48" rx="14" fill="#99f6e4" /><text x="32" y="32" fill="#115e59">D</text></g>
+    <g transform="translate(304,0)"><rect width="64" height="48" rx="14" fill="#bae6fd" /><text x="32" y="32" fill="#075985">E</text></g>
+    <g transform="translate(380,0)"><rect width="64" height="48" rx="14" fill="#e2e8f0" /><text x="32" y="32" fill="#334155">F</text></g>
+  </g>
+
+  <!-- Pills -->
+  <g transform="translate(620,486)" font-size="20" font-weight="700" fill="#ffffff">
+    <g><rect width="150" height="44" rx="22" fill="#ffffff" fill-opacity="0.16" /><text x="75" y="29" text-anchor="middle">Gratis · Free</text></g>
+    <g transform="translate(166,0)"><rect width="170" height="44" rx="22" fill="#ffffff" fill-opacity="0.16" /><text x="85" y="29" text-anchor="middle">Sin registro</text></g>
+    <g transform="translate(352,0)"><rect width="132" height="44" rx="22" fill="#ffffff" fill-opacity="0.16" /><text x="66" y="29" text-anchor="middle">ES · EN</text></g>
+  </g>
+</svg>

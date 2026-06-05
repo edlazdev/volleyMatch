@@ -22,6 +22,50 @@ const es: Dict = {
   'nav.teams': 'Equipos',
   'nav.matches': 'Enfrentamientos',
 
+  // Landing
+  'landing.hero.badge': '🏐 Vóley · Equipos justos',
+  'landing.hero.title': 'Forma equipos de vóley equilibrados en segundos',
+  'landing.hero.subtitle':
+    'Registra a los jugadores por nivel, genera equipos parejos automáticamente y arma tu torneo con llaves hasta la copa.',
+  'landing.hero.cta': 'Comenzar',
+  'landing.hero.note': 'Gratis · Sin registro · Funciona sin conexión',
+  'landing.features.title': 'Todo lo que necesitas para organizar el partido',
+  'landing.f.balance.title': 'Equipos equilibrados',
+  'landing.f.balance.desc':
+    'Reparto por nivel (algoritmo serpentina) para equipos parejos, no al azar.',
+  'landing.f.suggest.title': 'Sugerencias de cambio',
+  'landing.f.suggest.desc':
+    'Detecta intercambios que mejoran el equilibrio en tiempo real.',
+  'landing.f.import.title': 'Importar lista',
+  'landing.f.import.desc':
+    'Pega la lista de tu grupo de WhatsApp: detecta nombres y niveles.',
+  'landing.f.roster.title': 'Lista reutilizable',
+  'landing.f.roster.desc':
+    'Guarda tu pozo de jugadores y elige quién juega hoy con un toque.',
+  'landing.f.tournament.title': 'Torneos y llaves',
+  'landing.f.tournament.desc':
+    'Todos contra todos o eliminación directa hasta el campeón 🏆.',
+  'landing.f.levels.title': 'Niveles A–F',
+  'landing.f.levels.desc':
+    'Clasifica de A (competitivo) a F (principiante), con color.',
+  'landing.f.i18n.title': 'Bilingüe',
+  'landing.f.i18n.desc': 'Español e inglés con un clic.',
+  'landing.f.offline.title': 'Offline y privado',
+  'landing.f.offline.desc':
+    'Tus datos se guardan en tu dispositivo. Sin cuentas ni servidores.',
+  'landing.how.title': 'Cómo funciona',
+  'landing.how.s1.title': 'Arma tu lista',
+  'landing.how.s1.desc': 'Elige del pozo, importa desde texto o agrega a mano.',
+  'landing.how.s2.title': 'Genera equipos',
+  'landing.how.s2.desc':
+    'Equipos equilibrados al instante; ajústalos con un toque.',
+  'landing.how.s3.title': 'Juega el torneo',
+  'landing.how.s3.desc':
+    'Calendario todos contra todos o llaves hasta la copa.',
+  'landing.levels.title': 'Niveles de juego',
+  'landing.cta.title': '¿List@ para armar tu partido?',
+  'landing.cta.button': 'Crear equipos ahora',
+
   // Niveles
   'level.1': 'Competitivo',
   'level.2': 'Avanzado',
@@ -204,6 +248,48 @@ const en: Dict = {
   'nav.config': 'Setup',
   'nav.teams': 'Teams',
   'nav.matches': 'Matches',
+
+  // Landing
+  'landing.hero.badge': '🏐 Volleyball · Fair teams',
+  'landing.hero.title': 'Build balanced volleyball teams in seconds',
+  'landing.hero.subtitle':
+    'Register players by level, auto-generate even teams, and run your tournament with brackets all the way to the cup.',
+  'landing.hero.cta': 'Get started',
+  'landing.hero.note': 'Free · No sign-up · Works offline',
+  'landing.features.title': 'Everything you need to organize the game',
+  'landing.f.balance.title': 'Balanced teams',
+  'landing.f.balance.desc':
+    'Level-based serpentine distribution for even teams — not random.',
+  'landing.f.suggest.title': 'Swap suggestions',
+  'landing.f.suggest.desc':
+    'Spots swaps that improve balance in real time.',
+  'landing.f.import.title': 'Import a list',
+  'landing.f.import.desc':
+    'Paste your WhatsApp group list: names and levels are detected.',
+  'landing.f.roster.title': 'Reusable roster',
+  'landing.f.roster.desc':
+    'Save your player pool and pick who plays today with one tap.',
+  'landing.f.tournament.title': 'Tournaments & brackets',
+  'landing.f.tournament.desc':
+    'Round robin or single-elimination all the way to the champion 🏆.',
+  'landing.f.levels.title': 'Levels A–F',
+  'landing.f.levels.desc':
+    'Rank from A (competitive) to F (beginner), color-coded.',
+  'landing.f.i18n.title': 'Bilingual',
+  'landing.f.i18n.desc': 'Spanish and English in one click.',
+  'landing.f.offline.title': 'Offline & private',
+  'landing.f.offline.desc':
+    'Your data stays on your device. No accounts, no servers.',
+  'landing.how.title': 'How it works',
+  'landing.how.s1.title': 'Build your list',
+  'landing.how.s1.desc': 'Pick from the pool, import from text, or add manually.',
+  'landing.how.s2.title': 'Generate teams',
+  'landing.how.s2.desc': 'Balanced teams instantly; tweak them with a tap.',
+  'landing.how.s3.title': 'Play the tournament',
+  'landing.how.s3.desc': 'Round-robin schedule or brackets to the cup.',
+  'landing.levels.title': 'Skill levels',
+  'landing.cta.title': 'Ready to set up your game?',
+  'landing.cta.button': 'Create teams now',
 
   'level.1': 'Competitive',
   'level.2': 'Advanced',

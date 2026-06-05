@@ -23,7 +23,11 @@ export function AppLayout({ children }: AppLayoutProps) {
       <header className="sticky top-0 z-30 border-b border-slate-200/70 bg-slate-50/80 backdrop-blur-lg dark:border-slate-800/70 dark:bg-slate-950/80">
         <div className="mx-auto w-full max-w-5xl px-4 py-3">
           <div className="flex items-center justify-between gap-3">
-            <div className="flex items-center gap-2.5">
+            <button
+              onClick={() => setScreen('landing')}
+              className="flex items-center gap-2.5 rounded-xl text-left transition-opacity hover:opacity-80"
+              aria-label={t('app.subtitle')}
+            >
               <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-600 text-white shadow-glow">
                 <Dribbble className="h-5 w-5" />
               </div>
@@ -35,16 +39,18 @@ export function AppLayout({ children }: AppLayoutProps) {
                   {t('app.subtitle')}
                 </p>
               </div>
-            </div>
+            </button>
             <div className="flex items-center gap-2">
               <LanguageToggle />
               <ThemeToggle theme={theme} onToggle={toggleTheme} />
             </div>
           </div>
 
-          <div className="mt-3">
-            <StepNav screen={screen} hasTeams={hasTeams} onChange={setScreen} />
-          </div>
+          {screen !== 'landing' && (
+            <div className="mt-3">
+              <StepNav screen={screen} hasTeams={hasTeams} onChange={setScreen} />
+            </div>
+          )}
         </div>
       </header>
 
