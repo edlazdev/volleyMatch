@@ -62,9 +62,10 @@ export function LandingPage() {
           </p>
           <div className="mt-6 flex justify-center">
             <Button
+              variant="secondary"
               size="lg"
               onClick={start}
-              className="bg-white text-brand-700 hover:bg-white/90 active:bg-white/80 focus-visible:ring-white"
+              className="!border-transparent !bg-white !text-brand-700 hover:!bg-white/90 active:!bg-white/80"
             >
               <Sparkles className="h-5 w-5" />
               {t('landing.hero.cta')}

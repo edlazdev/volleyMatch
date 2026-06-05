@@ -46,8 +46,16 @@ Free · Bilingual (ES/EN) · No sign-up · Works offline
 
 ## 🖼️ Screenshots
 
-Screenshots live in [`docs/screenshots/`](docs/screenshots/) — follow the
-[capture guide](docs/screenshots/README.md) to generate them (~2 min).
+| Setup | Teams |
+| --- | --- |
+| ![Setup](docs/screenshots/config.png) | ![Teams](docs/screenshots/teams.png) |
+
+| Matches | Bracket (tournament) |
+| --- | --- |
+| ![Round robin](docs/screenshots/matches-rr.png) | ![Bracket](docs/screenshots/bracket.png) |
+
+> The current images are **on-brand mockups** for reference. For real product
+> screenshots, follow the [capture guide](docs/screenshots/README.md) (~2 min).
 
 ## 🧱 Stack
 

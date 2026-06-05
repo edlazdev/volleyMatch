@@ -46,12 +46,16 @@ Gratis · Bilingüe (ES/EN) · Sin registro · Funciona sin conexión
 
 ## 🖼️ Capturas
 
-Las capturas viven en [`docs/screenshots/`](docs/screenshots/) — sigue la
-[guía de capturas](docs/screenshots/README.md) para generarlas (toma ~2 min).
+| Configuración | Equipos |
+| --- | --- |
+| ![Configuración](docs/screenshots/config.png) | ![Equipos](docs/screenshots/teams.png) |
 
-| Configuración | Equipos | Llaves |
-| --- | --- | --- |
-| `docs/screenshots/config.png` | `docs/screenshots/teams.png` | `docs/screenshots/bracket.png` |
+| Enfrentamientos | Llaves (torneo) |
+| --- | --- |
+| ![Round robin](docs/screenshots/matches-rr.png) | ![Llaves](docs/screenshots/bracket.png) |
+
+> Las imágenes actuales son **mockups on‑brand** generados como referencia. Para
+> capturas reales del producto, sigue la [guía de capturas](docs/screenshots/README.md) (~2 min).
 
 ## 🧱 Stack
 

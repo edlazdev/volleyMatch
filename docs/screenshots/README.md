@@ -1,8 +1,15 @@
 # 📸 Capturas de pantalla
 
 Esta carpeta contiene las capturas usadas en el `README` y la landing estática
-(`public/landing.html`). Como el entorno de desarrollo no tiene un navegador
-headless para automatizarlas, se capturan **manualmente** (toma ~2 minutos).
+(`public/landing.html`).
+
+> ℹ️ Las imágenes actuales (`config.png`, `teams.png`, `matches-rr.png`,
+> `bracket.png`, `dark.png`, `mobile.png`) son **mockups on‑brand** generados a
+> partir de SVG (referencia visual). Para publicidad final conviene reemplazarlas
+> por **capturas reales** del producto siguiendo los pasos de abajo (~2 min).
+>
+> Para regenerar los mockups: `npm i -D @resvg/resvg-js && node scripts/gen-mockups.mjs`
+> (el script vive fuera del build; recuerda `npm un -D @resvg/resvg-js` al terminar).
 
 ## Cómo capturar
 
