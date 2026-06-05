@@ -27,8 +27,13 @@ const es: Dict = {
   'landing.hero.title': 'Forma equipos de vóley equilibrados en segundos',
   'landing.hero.subtitle':
     'Registra a los jugadores por nivel, genera equipos parejos automáticamente y arma tu torneo con llaves hasta la copa.',
-  'landing.hero.cta': 'Comenzar',
+  'landing.hero.cta': 'Comenzar gratis',
   'landing.hero.note': 'Gratis · Sin registro · Funciona sin conexión',
+  'landing.stats.teams': '2–16 equipos',
+  'landing.stats.levels': 'Niveles A–F',
+  'landing.stats.langs': 'ES · EN',
+  'landing.stats.offline': 'Offline',
+  'landing.preview.alt': 'Vista de equipos equilibrados en Volley Match',
   'landing.features.title': 'Todo lo que necesitas para organizar el partido',
   'landing.f.balance.title': 'Equipos equilibrados',
   'landing.f.balance.desc':
@@ -254,8 +259,13 @@ const en: Dict = {
   'landing.hero.title': 'Build balanced volleyball teams in seconds',
   'landing.hero.subtitle':
     'Register players by level, auto-generate even teams, and run your tournament with brackets all the way to the cup.',
-  'landing.hero.cta': 'Get started',
+  'landing.hero.cta': 'Start free',
   'landing.hero.note': 'Free · No sign-up · Works offline',
+  'landing.stats.teams': '2–16 teams',
+  'landing.stats.levels': 'Levels A–F',
+  'landing.stats.langs': 'ES · EN',
+  'landing.stats.offline': 'Offline',
+  'landing.preview.alt': 'Balanced teams view in Volley Match',
   'landing.features.title': 'Everything you need to organize the game',
   'landing.f.balance.title': 'Balanced teams',
   'landing.f.balance.desc':
