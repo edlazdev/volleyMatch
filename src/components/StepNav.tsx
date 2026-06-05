@@ -2,6 +2,7 @@ import { ListChecks, Swords, Users } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import type { Screen } from '@/types';
 import { cn } from '@/utils/cn';
+import { useI18n } from '@/i18n';
 
 interface StepNavProps {
   screen: Screen;
@@ -9,13 +10,14 @@ interface StepNavProps {
   onChange: (screen: Screen) => void;
 }
 
-const STEPS: { key: Screen; label: string; icon: LucideIcon }[] = [
-  { key: 'config', label: 'Configuración', icon: ListChecks },
-  { key: 'teams', label: 'Equipos', icon: Users },
-  { key: 'matches', label: 'Enfrentamientos', icon: Swords },
+const STEPS: { key: Screen; labelKey: string; icon: LucideIcon }[] = [
+  { key: 'config', labelKey: 'nav.config', icon: ListChecks },
+  { key: 'teams', labelKey: 'nav.teams', icon: Users },
+  { key: 'matches', labelKey: 'nav.matches', icon: Swords },
 ];
 
 export function StepNav({ screen, hasTeams, onChange }: StepNavProps) {
+  const { t } = useI18n();
   return (
     <nav className="flex items-center gap-1 rounded-xl bg-slate-100 p-1 dark:bg-slate-800">
       {STEPS.map((step) => {
@@ -36,7 +38,7 @@ export function StepNav({ screen, hasTeams, onChange }: StepNavProps) {
             )}
           >
             <Icon className="h-4 w-4 shrink-0" />
-            <span className="hidden xs:inline sm:inline">{step.label}</span>
+            <span className="hidden xs:inline sm:inline">{t(step.labelKey)}</span>
           </button>
         );
       })}

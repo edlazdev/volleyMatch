@@ -3,6 +3,7 @@ import type { SwapSuggestion, Team } from '@/types';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { LevelBadge } from '@/components/ui/LevelBadge';
+import { useI18n } from '@/i18n';
 
 interface SuggestionCardProps {
   suggestions: SwapSuggestion[];
@@ -15,6 +16,7 @@ export function SuggestionCard({
   teamsById,
   onApply,
 }: SuggestionCardProps) {
+  const { t } = useI18n();
   if (suggestions.length === 0) return null;
 
   return (
@@ -22,7 +24,7 @@ export function SuggestionCard({
       <div className="flex items-center gap-2 border-b border-slate-100 bg-amber-50/60 px-4 py-3 dark:border-slate-800 dark:bg-amber-950/30">
         <Lightbulb className="h-4 w-4 text-amber-500" />
         <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100">
-          Sugerencias de intercambio
+          {t('suggest.title')}
         </h3>
       </div>
 
@@ -58,7 +60,7 @@ export function SuggestionCard({
 
               <div className="flex items-center justify-between gap-3 sm:flex-col sm:items-end">
                 <p className="text-xs text-slate-500 dark:text-slate-400">
-                  Diferencia{' '}
+                  {t('suggest.diff')}{' '}
                   <span className="font-semibold text-rose-500">
                     {s.currentSpread}
                   </span>{' '}
@@ -68,7 +70,7 @@ export function SuggestionCard({
                   </span>
                 </p>
                 <Button size="sm" variant="secondary" onClick={() => onApply(s)}>
-                  Aplicar
+                  {t('suggest.apply')}
                 </Button>
               </div>
             </li>

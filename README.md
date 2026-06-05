@@ -20,6 +20,7 @@ Aplicación web **mobile first** para formar **equipos de vóley equilibrados** 
 - **Reorganizar equipos** con un botón de cambio por jugador (intercambiar o mover a un equipo con cupo), priorizando candidatos del mismo nivel.
 - **Enfrentamientos** generados automáticamente (round robin).
 - **Layout responsive**: la lista de jugadores pasa a 2 columnas en tablet/desktop.
+- **Bilingüe (i18n)**: español e inglés con selector en el header (se recuerda en LocalStorage).
 - **Modo claro / oscuro**.
 - **Persistencia automática** en LocalStorage (jugadores, equipos, configuración y lista por defecto).
 
@@ -52,7 +53,8 @@ src/
 │   └── ui/          # Button, Card, Input, Select, Modal, Stepper…
 ├── pages/           # ConfigPage, TeamsPage, MatchesPage
 ├── layouts/         # AppLayout (header, navegación, footer)
-├── hooks/           # useTheme, useTeamData, useTeamDnD
+├── i18n/            # Internacionalización (es/en): provider, hook y textos
+├── hooks/           # useTheme, useTeamData
 ├── store/           # Store Zustand + persistencia
 ├── services/        # Adaptador de LocalStorage
 ├── utils/           # Algoritmos de balance, matches, parseo, helpers

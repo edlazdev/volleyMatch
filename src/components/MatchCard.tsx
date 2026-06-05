@@ -1,5 +1,6 @@
 import type { Match, Team, TeamMetrics } from '@/types';
 import { cn } from '@/utils/cn';
+import { useI18n } from '@/i18n';
 
 interface MatchCardProps {
   match: Match;
@@ -66,6 +67,7 @@ function TeamSide({
   accent: number;
   align: 'start' | 'end';
 }) {
+  const { t } = useI18n();
   return (
     <div
       className={cn(
@@ -80,7 +82,9 @@ function TeamSide({
         <p className="truncate text-sm font-bold text-slate-800 dark:text-slate-100">
           {team.name}
         </p>
-        <p className="text-xs text-slate-400">Prom. {avg.toFixed(1)}</p>
+        <p className="text-xs text-slate-400">
+          {t('match.avg', { n: avg.toFixed(1) })}
+        </p>
       </div>
       {align === 'end' && (
         <span className={cn('h-3 w-3 shrink-0 rounded-full', DOT_ACCENTS[accent % DOT_ACCENTS.length])} />

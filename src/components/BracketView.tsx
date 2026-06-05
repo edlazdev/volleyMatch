@@ -1,9 +1,31 @@
 import { useMemo } from 'react';
 import { RefreshCw, Trophy } from 'lucide-react';
 import type { BracketMatch, Team } from '@/types';
-import { bracketChampion, matchWinner, roundTitle } from '@/utils/bracket';
+import { bracketChampion, matchWinner } from '@/utils/bracket';
 import { Button } from '@/components/ui/Button';
 import { cn } from '@/utils/cn';
+import { useI18n } from '@/i18n';
+
+/** Título de ronda traducido según cuántos equipos participan en ella. */
+function useRoundTitle() {
+  const { t } = useI18n();
+  return (teamsInRound: number): string => {
+    switch (teamsInRound) {
+      case 2:
+        return t('round.final');
+      case 4:
+        return t('round.semis');
+      case 8:
+        return t('round.quarters');
+      case 16:
+        return t('round.r16');
+      case 32:
+        return t('round.r32');
+      default:
+        return t('round.of', { n: teamsInRound });
+    }
+  };
+}
 
 interface BracketViewProps {
   bracket: BracketMatch[];
@@ -31,6 +53,8 @@ export function BracketView({
   onPick,
   onRegenerate,
 }: BracketViewProps) {
+  const { t } = useI18n();
+  const roundTitle = useRoundTitle();
   const rounds = useMemo(() => {
     const map = new Map<number, BracketMatch[]>();
     for (const m of bracket) {
@@ -55,12 +79,11 @@ export function BracketView({
     <div className="space-y-4">
       <div className="flex items-center justify-between gap-3">
         <p className="text-xs text-slate-500 dark:text-slate-400">
-          Toca al ganador de cada partido para avanzarlo hasta la final. Los
-          equipos están sembrados por nivel.
+          {t('bracket.help')}
         </p>
         <Button variant="secondary" size="sm" onClick={onRegenerate}>
           <RefreshCw className="h-4 w-4" />
-          Regenerar
+          {t('bracket.regenerate')}
         </Button>
       </div>
 
@@ -88,7 +111,7 @@ export function BracketView({
           {/* Columna del campeón */}
           <div className="flex min-w-[200px] flex-col">
             <h4 className="mb-2 text-center text-xs font-bold uppercase tracking-wide text-amber-500">
-              Campeón
+              {t('bracket.champion')}
             </h4>
             <div className="flex flex-1 items-center justify-center">
               <ChampionCard name={championTeam?.name ?? null} />
@@ -156,6 +179,7 @@ function Slot({
   clickable: boolean;
   onClick: () => void;
 }) {
+  const { t } = useI18n();
   const team = teamId ? teamsById.get(teamId) : null;
   const accent = teamId ? accentByTeam.get(teamId) ?? 0 : 0;
 
@@ -179,13 +203,14 @@ function Slot({
           team ? DOTS[accent % DOTS.length] : 'bg-slate-200 dark:bg-slate-700',
         )}
       />
-      <span className="flex-1 truncate">{team?.name ?? 'Por definir'}</span>
+      <span className="flex-1 truncate">{team?.name ?? t('bracket.tbdSlot')}</span>
       {isWinner && <Trophy className="h-3.5 w-3.5 shrink-0 text-emerald-500" />}
     </button>
   );
 }
 
 function ChampionCard({ name }: { name: string | null }) {
+  const { t } = useI18n();
   const crowned = !!name;
   return (
     <div
@@ -209,7 +234,7 @@ function ChampionCard({ name }: { name: string | null }) {
       {crowned ? (
         <>
           <p className="text-[11px] font-bold uppercase tracking-wide text-amber-600 dark:text-amber-400">
-            ¡Campeón!
+            {t('bracket.championLabel')}
           </p>
           <p className="text-base font-extrabold leading-tight text-slate-800 dark:text-slate-100">
             {name}
@@ -217,7 +242,7 @@ function ChampionCard({ name }: { name: string | null }) {
         </>
       ) : (
         <p className="text-xs text-slate-400 dark:text-slate-500">
-          Campeón por definir
+          {t('bracket.tbd')}
         </p>
       )}
     </div>

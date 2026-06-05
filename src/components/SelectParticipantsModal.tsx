@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/Button';
 import { LevelBadge } from '@/components/ui/LevelBadge';
 import { cn } from '@/utils/cn';
 import type { RosterEntry } from '@/store/useVolleyStore';
+import { useI18n } from '@/i18n';
 
 interface SelectParticipantsModalProps {
   open: boolean;
@@ -28,6 +29,7 @@ export function SelectParticipantsModal({
   onConfirm,
   onEditList,
 }: SelectParticipantsModalProps) {
+  const { t } = useI18n();
   // Conjunto de índices seleccionados.
   const [selected, setSelected] = useState<Set<number>>(new Set());
 
@@ -74,38 +76,39 @@ export function SelectParticipantsModal({
   return (
     <Modal
       open={open}
-      title="Elegir participantes"
+      title={t('participants.title')}
       onClose={onClose}
       footer={
         <div className="flex items-center justify-between gap-3">
           <span className={cn('text-xs font-semibold', tone)}>
-            {count} / {capacity} seleccionados
+            {t('participants.selected', { n: count, cap: capacity })}
           </span>
           <div className="flex gap-2">
             <Button variant="ghost" size="sm" onClick={onClose}>
-              Cancelar
+              {t('common.cancel')}
             </Button>
             <Button size="sm" onClick={handleConfirm} disabled={count === 0}>
               <UserCheck className="h-4 w-4" />
-              Usar {count || ''}
+              {t('participants.use')} {count || ''}
             </Button>
           </div>
         </div>
       }
     >
       <div className="space-y-3">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-2">
           <p className="text-xs text-slate-500 dark:text-slate-400">
-            Marca a los que jugarán. Cupo para{' '}
-            <span className="font-semibold">{teamCount} equipos</span> ={' '}
-            <span className="font-semibold">{capacity}</span>.
+            {t('participants.instruction', {
+              teams: teamCount,
+              cap: capacity,
+            })}
           </p>
           <button
             onClick={toggleAll}
-            className="inline-flex items-center gap-1 text-xs font-semibold text-brand-600 hover:text-brand-700 dark:text-brand-400"
+            className="inline-flex shrink-0 items-center gap-1 text-xs font-semibold text-brand-600 hover:text-brand-700 dark:text-brand-400"
           >
             <CheckCheck className="h-3.5 w-3.5" />
-            {allSelected ? 'Ninguno' : 'Todos'}
+            {allSelected ? t('common.none') : t('common.all')}
           </button>
         </div>
 
@@ -113,17 +116,17 @@ export function SelectParticipantsModal({
           <div className="flex items-start gap-2 rounded-xl bg-amber-50 px-3 py-2.5 text-xs text-amber-700 dark:bg-amber-950/40 dark:text-amber-300">
             <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
             <div className="flex-1">
-              Tu lista por defecto tiene{' '}
-              <span className="font-semibold">{roster.length}</span> personas,
-              faltan{' '}
-              <span className="font-semibold">{capacity - roster.length}</span>{' '}
-              para el cupo de {capacity}.
+              {t('participants.shortfall', {
+                n: roster.length,
+                m: capacity - roster.length,
+                cap: capacity,
+              })}
               <button
                 onClick={onEditList}
                 className="ml-1 inline-flex items-center gap-1 font-bold text-amber-800 underline underline-offset-2 hover:text-amber-900 dark:text-amber-200"
               >
                 <ListPlus className="h-3.5 w-3.5" />
-                Editar lista
+                {t('participants.editList')}
               </button>
             </div>
           </div>

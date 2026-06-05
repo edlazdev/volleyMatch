@@ -5,6 +5,7 @@ import { LEVELS, LEVEL_SELECT_CLASS, levelCode } from '@/data/levels';
 import { Input } from '@/components/ui/Input';
 import { Select } from '@/components/ui/Select';
 import { Button } from '@/components/ui/Button';
+import { useI18n } from '@/i18n';
 
 interface PlayerFormValues {
   name: string;
@@ -18,6 +19,7 @@ interface PlayerFormProps {
 }
 
 export function PlayerForm({ disabled, onSubmit }: PlayerFormProps) {
+  const { t } = useI18n();
   const {
     register,
     handleSubmit,
@@ -42,23 +44,23 @@ export function PlayerForm({ disabled, onSubmit }: PlayerFormProps) {
       <div className="flex flex-col gap-3 sm:flex-row">
         <div className="flex-1">
           <label className="mb-1.5 block text-xs font-semibold text-slate-500 dark:text-slate-400">
-            Nombre del jugador
+            {t('form.nameLabel')}
           </label>
           <Input
-            placeholder="Ej. Juan Pérez"
+            placeholder={t('form.namePlaceholder')}
             autoComplete="off"
             invalid={!!errors.name}
             disabled={disabled}
             {...register('name', {
-              required: 'El nombre es obligatorio',
-              maxLength: { value: 40, message: 'Máximo 40 caracteres' },
+              required: t('form.required'),
+              maxLength: { value: 40, message: t('form.maxLen') },
             })}
           />
         </div>
 
         <div className="sm:w-24">
           <label className="mb-1.5 block text-xs font-semibold text-slate-500 dark:text-slate-400">
-            Nivel
+            {t('form.levelLabel')}
           </label>
           <Select
             disabled={disabled}
@@ -67,7 +69,11 @@ export function PlayerForm({ disabled, onSubmit }: PlayerFormProps) {
             {...register('level', { required: true })}
           >
             {LEVELS.map((lvl) => (
-              <option key={lvl.value} value={lvl.value} title={lvl.label}>
+              <option
+                key={lvl.value}
+                value={lvl.value}
+                title={t(`level.${lvl.value}`)}
+              >
                 {levelCode(lvl.value)}
               </option>
             ))}
@@ -83,7 +89,7 @@ export function PlayerForm({ disabled, onSubmit }: PlayerFormProps) {
 
       <Button type="submit" disabled={disabled} fullWidth size="md">
         <UserPlus className="h-4 w-4" />
-        {disabled ? 'Cupo completo' : 'Agregar jugador'}
+        {disabled ? t('form.full') : t('form.add')}
       </Button>
     </form>
   );

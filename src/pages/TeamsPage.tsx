@@ -8,8 +8,10 @@ import { SuggestionCard } from '@/components/SuggestionCard';
 import { SwapPlayerModal } from '@/components/SwapPlayerModal';
 import { Button } from '@/components/ui/Button';
 import { EmptyState } from '@/components/ui/EmptyState';
+import { useI18n } from '@/i18n';
 
 export function TeamsPage() {
+  const { t } = useI18n();
   const generateTeams = useVolleyStore((s) => s.generateTeams);
   const applySuggestion = useVolleyStore((s) => s.applySuggestion);
   const renameTeam = useVolleyStore((s) => s.renameTeam);
@@ -46,10 +48,12 @@ export function TeamsPage() {
     return (
       <EmptyState
         icon={Users}
-        title="Todavía no hay equipos"
-        description="Vuelve a la configuración para registrar jugadores y generar equipos."
+        title={t('teams.empty.title')}
+        description={t('teams.empty.desc')}
         action={
-          <Button onClick={() => setScreen('config')}>Ir a configuración</Button>
+          <Button onClick={() => setScreen('config')}>
+            {t('teams.goConfig')}
+          </Button>
         }
       />
     );
@@ -59,16 +63,16 @@ export function TeamsPage() {
     <div className="space-y-4 animate-fade-in">
       <div className="flex items-center justify-between gap-3">
         <h2 className="text-lg font-extrabold tracking-tight">
-          Equipos generados
+          {t('teams.title')}
         </h2>
         <div className="flex gap-2">
           <Button variant="secondary" size="sm" onClick={resetTeamNames}>
             <RotateCcw className="h-4 w-4" />
-            <span className="hidden sm:inline">Reiniciar nombres</span>
+            <span className="hidden sm:inline">{t('teams.resetNames')}</span>
           </Button>
           <Button variant="secondary" size="sm" onClick={generateTeams}>
             <RefreshCw className="h-4 w-4" />
-            Regenerar
+            {t('teams.regenerate')}
           </Button>
         </div>
       </div>
@@ -82,8 +86,7 @@ export function TeamsPage() {
       />
 
       <p className="text-xs text-slate-500 dark:text-slate-400">
-        Usa el botón de cambio de cada jugador para intercambiarlo o moverlo a
-        otro equipo. Se sugieren primero los del mismo nivel.
+        {t('teams.help')}
       </p>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -124,7 +127,7 @@ export function TeamsPage() {
           className="shadow-glow"
         >
           <Swords className="h-5 w-5" />
-          Ver enfrentamientos
+          {t('teams.viewMatches')}
         </Button>
       </div>
 

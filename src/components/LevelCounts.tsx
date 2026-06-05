@@ -7,6 +7,7 @@ import {
   levelCode,
 } from '@/data/levels';
 import { cn } from '@/utils/cn';
+import { useI18n } from '@/i18n';
 
 interface LevelCountsProps {
   players: Player[];
@@ -21,6 +22,7 @@ interface LevelCountsProps {
  * Si se pasa `onSelect`, las tarjetas funcionan como filtro (toggle).
  */
 export function LevelCounts({ players, selected, onSelect }: LevelCountsProps) {
+  const { t } = useI18n();
   const counts = useMemo(() => {
     const map = new Map<PlayerLevel, number>();
     for (const lvl of LEVELS) map.set(lvl.value, 0);
@@ -54,18 +56,16 @@ export function LevelCounts({ players, selected, onSelect }: LevelCountsProps) {
                   ? 'border-slate-200 bg-slate-50 opacity-50 dark:border-slate-800 dark:bg-slate-900'
                   : LEVEL_SOFT_CARD_CLASS[lvl.value],
             )}
-            title={
-              interactive
-                ? `Nivel ${levelCode(lvl.value)} · ${lvl.label} (filtrar)`
-                : `Nivel ${levelCode(lvl.value)} · ${lvl.label}`
-            }
+            title={t(
+              interactive ? 'level.tooltipFilter' : 'level.tooltip',
+              { code: levelCode(lvl.value), label: t(`level.${lvl.value}`) },
+            )}
           >
             <span
               className={cn(
                 'inline-flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold leading-none',
                 lvl.badgeClass,
               )}
-              title={`Nivel ${levelCode(lvl.value)} · ${lvl.label}`}
             >
               {levelCode(lvl.value)}
             </span>
@@ -73,7 +73,7 @@ export function LevelCounts({ players, selected, onSelect }: LevelCountsProps) {
               {count}
             </span>
             <span className="mt-0.5 truncate text-[10px] font-medium leading-tight text-slate-500 dark:text-slate-400">
-              {levelCode(lvl.value)} · {lvl.label}
+              {levelCode(lvl.value)} · {t(`level.${lvl.value}`)}
             </span>
           </button>
         );

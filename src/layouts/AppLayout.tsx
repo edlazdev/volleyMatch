@@ -1,9 +1,11 @@
 import type { ReactNode } from 'react';
 import { Dribbble, Github, Instagram } from 'lucide-react';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { LanguageToggle } from '@/components/LanguageToggle';
 import { StepNav } from '@/components/StepNav';
 import { useTheme } from '@/hooks/useTheme';
 import { useVolleyStore } from '@/store/useVolleyStore';
+import { useI18n } from '@/i18n';
 
 interface AppLayoutProps {
   children: ReactNode;
@@ -11,6 +13,7 @@ interface AppLayoutProps {
 
 export function AppLayout({ children }: AppLayoutProps) {
   const { theme, toggleTheme } = useTheme();
+  const { t } = useI18n();
   const screen = useVolleyStore((s) => s.screen);
   const setScreen = useVolleyStore((s) => s.setScreen);
   const hasTeams = useVolleyStore((s) => s.teams.length > 0);
@@ -29,11 +32,14 @@ export function AppLayout({ children }: AppLayoutProps) {
                   Volley<span className="text-brand-600 dark:text-brand-400">Match</span>
                 </h1>
                 <p className="hidden text-xs text-slate-500 dark:text-slate-400 sm:block">
-                  Equipos equilibrados por nivel
+                  {t('app.subtitle')}
                 </p>
               </div>
             </div>
-            <ThemeToggle theme={theme} onToggle={toggleTheme} />
+            <div className="flex items-center gap-2">
+              <LanguageToggle />
+              <ThemeToggle theme={theme} onToggle={toggleTheme} />
+            </div>
           </div>
 
           <div className="mt-3">
@@ -69,7 +75,7 @@ export function AppLayout({ children }: AppLayoutProps) {
             </a>
           </div>
           <p className="text-center text-xs text-slate-400">
-            Volley Match · Hecho por{' '}
+            Volley Match · {t('footer.madeBy')}{' '}
             <a
               href="https://github.com/edlazdev"
               target="_blank"

@@ -11,7 +11,7 @@ import {
 } from 'lucide-react';
 import { useVolleyStore, maxPlayersFor } from '@/store/useVolleyStore';
 import { useTeamData } from '@/hooks/useTeamData';
-import { MAX_TEAMS, MIN_TEAMS, getLevel } from '@/data/levels';
+import { MAX_TEAMS, MIN_TEAMS, levelCode } from '@/data/levels';
 import { SAMPLE_ROSTER } from '@/data/sampleRoster';
 import type { PlayerLevel } from '@/types';
 import { Card } from '@/components/ui/Card';
@@ -24,8 +24,10 @@ import { LevelCounts } from '@/components/LevelCounts';
 import { ImportPlayersModal } from '@/components/ImportPlayersModal';
 import { SelectParticipantsModal } from '@/components/SelectParticipantsModal';
 import { ManageRosterModal } from '@/components/ManageRosterModal';
+import { useI18n } from '@/i18n';
 
 export function ConfigPage() {
+  const { t, tn } = useI18n();
   const teamCount = useVolleyStore((s) => s.teamCount);
   const setTeamCount = useVolleyStore((s) => s.setTeamCount);
   const addPlayer = useVolleyStore((s) => s.addPlayer);
@@ -75,14 +77,14 @@ export function ConfigPage() {
         <div className="mb-3 flex items-center justify-between">
           <div>
             <h2 className="text-sm font-bold text-slate-800 dark:text-slate-100">
-              Cantidad de equipos
+              {t('config.teams.title')}
             </h2>
             <p className="text-xs text-slate-500 dark:text-slate-400">
-              Hasta 6 jugadores por equipo (pueden ser menos, pero parejos).
+              {t('config.teams.subtitle')}
             </p>
           </div>
           <span className="rounded-full bg-brand-50 px-2.5 py-1 text-xs font-bold text-brand-700 dark:bg-brand-950 dark:text-brand-300">
-            máx. {maxPlayers}
+            {t('config.teams.max', { n: maxPlayers })}
           </span>
         </div>
         <Stepper
@@ -90,22 +92,22 @@ export function ConfigPage() {
           min={MIN_TEAMS}
           max={MAX_TEAMS}
           onChange={setTeamCount}
-          suffix="equipos"
+          suffix={t('config.teams.suffix')}
         />
       </Card>
 
       {/* Armar la lista (acciones previas a agregar a mano) */}
       <Card className="p-4 sm:p-5">
         <h2 className="text-sm font-bold text-slate-800 dark:text-slate-100">
-          Arma tu lista
+          {t('config.build.title')}
         </h2>
         <p className="mb-3 text-xs text-slate-500 dark:text-slate-400">
-          Elige del grupo, edita la lista por defecto o importa una lista.
+          {t('config.build.subtitle')}
         </p>
         <div className="flex flex-wrap gap-2">
           <Button size="sm" onClick={() => setSelectOpen(true)}>
             <UserCheck className="h-4 w-4" />
-            Elegir participantes
+            {t('config.build.choose')}
           </Button>
           <Button
             variant="secondary"
@@ -113,7 +115,7 @@ export function ConfigPage() {
             onClick={() => setManageOpen(true)}
           >
             <ListPlus className="h-4 w-4" />
-            Editar lista por defecto
+            {t('config.build.editList')}
           </Button>
           <Button
             variant="secondary"
@@ -122,7 +124,7 @@ export function ConfigPage() {
             disabled={atCapacity}
           >
             <ClipboardList className="h-4 w-4" />
-            Importar lista
+            {t('config.build.import')}
           </Button>
         </div>
       </Card>
@@ -130,7 +132,7 @@ export function ConfigPage() {
       {/* Agregar jugador a mano */}
       <Card className="p-4 sm:p-5">
         <h2 className="mb-3 text-sm font-bold text-slate-800 dark:text-slate-100">
-          Agregar jugador
+          {t('config.add.title')}
         </h2>
         <PlayerForm disabled={atCapacity} onSubmit={addPlayer} />
       </Card>
@@ -139,7 +141,7 @@ export function ConfigPage() {
       <Card className="p-4 sm:p-5">
         <div className="mb-2 flex items-center justify-between text-sm">
           <span className="font-semibold text-slate-700 dark:text-slate-200">
-            Jugadores registrados
+            {t('config.counter.title')}
           </span>
           <span className="font-bold tabular-nums text-slate-800 dark:text-slate-100">
             {players.length} / {maxPlayers}
@@ -168,7 +170,7 @@ export function ConfigPage() {
       <Card className="p-4 sm:p-5">
         <div className="mb-1 flex items-center justify-between">
           <h2 className="text-sm font-bold text-slate-800 dark:text-slate-100">
-            Lista de jugadores
+            {t('config.list.title')}
           </h2>
           {players.length > 0 && (
             <button
@@ -176,7 +178,7 @@ export function ConfigPage() {
               className="inline-flex items-center gap-1 text-xs font-semibold text-rose-500 hover:text-rose-600"
             >
               <Trash2 className="h-3.5 w-3.5" />
-              Vaciar
+              {t('config.list.clear')}
             </button>
           )}
         </div>
@@ -184,9 +186,9 @@ export function ConfigPage() {
         {players.length > 0 && (
           <div className="mb-4">
             <p className="mb-2 text-xs font-semibold text-slate-500 dark:text-slate-400">
-              Distribución por nivel{' '}
+              {t('config.list.distribution')}{' '}
               <span className="font-normal text-slate-400">
-                · toca un nivel para filtrar
+                {t('config.list.distributionHint')}
               </span>
             </p>
             <LevelCounts
@@ -202,7 +204,10 @@ export function ConfigPage() {
         {levelFilter !== null && (
           <div className="mb-3 flex items-center justify-between rounded-xl bg-brand-50 px-3 py-2 text-sm dark:bg-brand-950/40">
             <span className="font-medium text-brand-700 dark:text-brand-300">
-              Mostrando nivel {levelFilter} · {getLevel(levelFilter).label}
+              {t('config.filter.showing', {
+                code: levelCode(levelFilter),
+                label: t(`level.${levelFilter}`),
+              })}
               <span className="ml-1 text-brand-500">
                 ({visiblePlayers.length})
               </span>
@@ -211,7 +216,7 @@ export function ConfigPage() {
               onClick={() => setLevelFilter(null)}
               className="text-xs font-semibold text-brand-600 hover:text-brand-700 dark:text-brand-400"
             >
-              Ver todos
+              {t('config.filter.seeAll')}
             </button>
           </div>
         )}
@@ -229,14 +234,14 @@ export function ConfigPage() {
               size="sm"
               fullWidth
               onClick={handleAddToDefault}
-              title="Agrega los jugadores nuevos a la lista por defecto (no la reemplaza)"
+              title={t('config.addToDefaultTitle')}
             >
               <BookmarkPlus className="h-4 w-4" />
               {addedHint === null
-                ? 'Añadir jugadores a la lista por defecto'
+                ? t('config.addToDefault')
                 : addedHint > 0
-                  ? `+${addedHint} añadido${addedHint === 1 ? '' : 's'} a la lista por defecto`
-                  : 'Ya estaban todos en la lista por defecto'}
+                  ? tn(addedHint, 'config.addedToDefault', { n: addedHint })
+                  : t('config.alreadyInDefault')}
             </Button>
           </div>
         )}
@@ -252,7 +257,7 @@ export function ConfigPage() {
           className="shadow-glow"
         >
           <Sparkles className="h-5 w-5" />
-          Generar equipos equilibrados
+          {t('config.generate')}
         </Button>
       </div>
 

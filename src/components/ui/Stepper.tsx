@@ -1,5 +1,6 @@
 import { Minus, Plus } from 'lucide-react';
 import { cn } from '@/utils/cn';
+import { useI18n } from '@/i18n';
 
 interface StepperProps {
   value: number;
@@ -20,6 +21,7 @@ export function Stepper({
   suffix,
   className,
 }: StepperProps) {
+  const { t } = useI18n();
   const dec = () => onChange(Math.max(min, value - 1));
   const inc = () => onChange(Math.min(max, value + 1));
 
@@ -30,7 +32,7 @@ export function Stepper({
         className,
       )}
     >
-      <StepButton ariaLabel="Quitar uno" onClick={dec} disabled={value <= min}>
+      <StepButton ariaLabel={t('stepper.dec')} onClick={dec} disabled={value <= min}>
         <Minus className="h-5 w-5" />
       </StepButton>
 
@@ -45,7 +47,7 @@ export function Stepper({
         )}
       </div>
 
-      <StepButton ariaLabel="Agregar uno" onClick={inc} disabled={value >= max}>
+      <StepButton ariaLabel={t('stepper.inc')} onClick={inc} disabled={value >= max}>
         <Plus className="h-5 w-5" />
       </StepButton>
     </div>

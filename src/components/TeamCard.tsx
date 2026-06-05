@@ -3,6 +3,7 @@ import type { Player, Team, TeamMetrics } from '@/types';
 import { PlayerRow } from '@/components/PlayerRow';
 import { PLAYERS_PER_TEAM } from '@/data/levels';
 import { cn } from '@/utils/cn';
+import { useI18n } from '@/i18n';
 
 interface TeamCardProps {
   team: Team;
@@ -41,6 +42,7 @@ export function TeamCard({
   onSwapPlayer,
   teamSize = PLAYERS_PER_TEAM,
 }: TeamCardProps) {
+  const { t, tn } = useI18n();
   const accent = ACCENTS[accentIndex % ACCENTS.length];
   const isFull = team.playerIds.length >= teamSize;
 
@@ -55,8 +57,8 @@ export function TeamCard({
                 value={team.name}
                 onChange={(e) => onRename(e.target.value)}
                 maxLength={24}
-                aria-label="Nombre del equipo"
-                placeholder="Nombre del equipo"
+                aria-label={t('team.name')}
+                placeholder={t('team.name')}
                 className="min-w-0 flex-1 truncate rounded-md bg-transparent px-1 py-0.5 text-base font-extrabold tracking-tight text-white outline-none placeholder:text-white/60 hover:bg-white/10 focus:bg-white/15"
               />
               <Pencil className="h-3.5 w-3.5 shrink-0 text-white/50 transition-colors group-hover:text-white/80" />
@@ -68,18 +70,18 @@ export function TeamCard({
           )}
           {highlight && (
             <span className="shrink-0 rounded-full bg-white/20 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide backdrop-blur">
-              {highlight === 'strong' ? 'Más fuerte' : 'Más débil'}
+              {highlight === 'strong' ? t('team.strong') : t('team.weak')}
             </span>
           )}
         </div>
 
         {/* Métricas */}
         <div className="mt-2 grid grid-cols-3 gap-2 text-center">
-          <Metric icon={TrendingUp} label="Promedio" value={metrics.teamAverageLevel.toFixed(1)} />
-          <Metric icon={Sigma} label="Total" value={String(metrics.teamTotalLevel)} />
+          <Metric icon={TrendingUp} label={t('team.avg')} value={metrics.teamAverageLevel.toFixed(1)} />
+          <Metric icon={Sigma} label={t('team.total')} value={String(metrics.teamTotalLevel)} />
           <Metric
             icon={Users}
-            label="Jugadores"
+            label={t('team.players')}
             value={`${metrics.teamPlayerCount}/${teamSize}`}
           />
         </div>
@@ -95,7 +97,7 @@ export function TeamCard({
       >
         {players.length === 0 ? (
           <p className="py-6 text-xs text-slate-400 dark:text-slate-500">
-            Sin jugadores
+            {t('team.noPlayers')}
           </p>
         ) : (
           players.map((player) => (
@@ -109,7 +111,9 @@ export function TeamCard({
 
         {!isFull && players.length > 0 && (
           <p className="pt-1 text-center text-[11px] text-slate-400 dark:text-slate-500">
-            {teamSize - players.length} lugar(es) libre(s)
+            {tn(teamSize - players.length, 'team.freeSlots', {
+              n: teamSize - players.length,
+            })}
           </p>
         )}
       </div>

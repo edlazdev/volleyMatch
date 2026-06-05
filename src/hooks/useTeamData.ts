@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { useVolleyStore, maxPlayersFor } from '@/store/useVolleyStore';
 import { PLAYERS_PER_TEAM } from '@/data/levels';
+import { useI18n } from '@/i18n';
 import {
   calculateSpread,
   calculateTeamMetrics,
@@ -23,6 +24,7 @@ export interface RosterValidation {
 
 /** Hook con toda la información derivada de jugadores y equipos. */
 export function useTeamData() {
+  const { t, tn } = useI18n();
   const players = useVolleyStore((s) => s.players);
   const teams = useVolleyStore((s) => s.teams);
   const teamCount = useVolleyStore((s) => s.teamCount);
@@ -43,24 +45,32 @@ export function useTeamData() {
     let message: string | null = null;
 
     if (current === 0) {
-      message = 'Agrega jugadores para empezar.';
+      message = t('valid.addPlayers');
     } else if (!enough) {
-      message = `Necesitas al menos ${teamCount} jugadores (1 por equipo).`;
+      message = t('valid.needMin', { n: teamCount });
     } else if (!withinCap) {
       const extra = current - required;
-      message = `Sobran ${extra} ${extra === 1 ? 'jugador' : 'jugadores'}: el máximo es ${required} (${teamSize} por equipo).`;
+      message = tn(extra, 'valid.overflow', {
+        extra,
+        max: required,
+        size: teamSize,
+      });
     } else if (!even) {
       const toRemove = current % teamCount;
       const toAdd = teamCount - toRemove;
-      message = `Para equipos parejos, quita ${toRemove} o agrega ${toAdd} (deben ser múltiplos de ${teamCount}).`;
+      message = t('valid.uneven', {
+        remove: toRemove,
+        add: toAdd,
+        teams: teamCount,
+      });
     } else if (teamCount === 2) {
-      message = `¡Listo! Pueden jugar ${perTeam} vs ${perTeam}.`;
+      message = t('valid.readyVs', { n: perTeam });
     } else {
-      message = `¡Listo! ${perTeam} jugadores por equipo en ${teamCount} equipos.`;
+      message = t('valid.readyPerTeam', { n: perTeam, teams: teamCount });
     }
 
     return { required, current, isValid, perTeam, message };
-  }, [players.length, teamCount, teamSize]);
+  }, [players.length, teamCount, teamSize, t, tn]);
 
   const metricsByTeam = useMemo<Map<string, TeamMetrics>>(() => {
     return new Map(

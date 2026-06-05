@@ -5,6 +5,7 @@ import { PLAYERS_PER_TEAM } from '@/data/levels';
 import { Modal } from '@/components/ui/Modal';
 import { LevelBadge } from '@/components/ui/LevelBadge';
 import { cn } from '@/utils/cn';
+import { useI18n } from '@/i18n';
 
 interface SwapPlayerModalProps {
   open: boolean;
@@ -36,6 +37,7 @@ export function SwapPlayerModal({
   onClose,
   teamSize = PLAYERS_PER_TEAM,
 }: SwapPlayerModalProps) {
+  const { t } = useI18n();
   const sourceTeamId = useMemo(() => {
     if (!source) return null;
     return teams.find((t) => t.playerIds.includes(source.id))?.id ?? null;
@@ -79,7 +81,7 @@ export function SwapPlayerModal({
   return (
     <Modal
       open={open && !!source}
-      title="Cambiar jugador"
+      title={t('swap.title')}
       onClose={onClose}
     >
       {source && (
@@ -87,11 +89,7 @@ export function SwapPlayerModal({
           <div className="flex items-center gap-2 rounded-xl bg-slate-50 px-3 py-2.5 dark:bg-slate-800/60">
             <ArrowLeftRight className="h-4 w-4 shrink-0 text-brand-500" />
             <span className="text-sm text-slate-600 dark:text-slate-300">
-              Intercambiar a{' '}
-              <span className="font-bold text-slate-900 dark:text-slate-50">
-                {source.name}
-              </span>{' '}
-              por…
+              {t('swap.intro', { name: source.name })}
             </span>
             <LevelBadge level={source.level} className="ml-auto" />
           </div>
@@ -99,7 +97,7 @@ export function SwapPlayerModal({
           {teamsWithSpace.length > 0 && (
             <div>
               <p className="mb-2 text-xs font-semibold text-slate-500 dark:text-slate-400">
-                Mover a un equipo con cupo
+                {t('swap.moveTitle')}
               </p>
               <ul className="space-y-1.5">
                 {teamsWithSpace.map((team) => (
@@ -125,14 +123,14 @@ export function SwapPlayerModal({
           {sameLevel.length > 0 && (
             <Section
               icon
-              title="Mismo nivel · recomendado"
+              title={t('swap.sameLevel')}
               candidates={sameLevel}
               onPick={onSwap}
             />
           )}
 
           <Section
-            title={sameLevel.length > 0 ? 'Otros jugadores' : 'Jugadores'}
+            title={sameLevel.length > 0 ? t('swap.others') : t('swap.players')}
             candidates={others}
             onPick={onSwap}
           />
@@ -141,7 +139,7 @@ export function SwapPlayerModal({
             others.length === 0 &&
             teamsWithSpace.length === 0 && (
               <p className="py-6 text-center text-sm text-slate-400">
-                No hay otros equipos ni jugadores disponibles.
+                {t('swap.none')}
               </p>
             )}
         </div>

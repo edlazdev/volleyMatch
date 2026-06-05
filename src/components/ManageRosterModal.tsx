@@ -5,10 +5,11 @@ import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Select } from '@/components/ui/Select';
 import { EmptyState } from '@/components/ui/EmptyState';
-import { LEVELS, LEVEL_SELECT_CLASS, getLevel, levelCode } from '@/data/levels';
+import { LEVELS, LEVEL_SELECT_CLASS, levelCode } from '@/data/levels';
 import { SAMPLE_ROSTER } from '@/data/sampleRoster';
 import { useVolleyStore } from '@/store/useVolleyStore';
 import type { PlayerLevel } from '@/types';
+import { useI18n } from '@/i18n';
 
 interface ManageRosterModalProps {
   open: boolean;
@@ -17,6 +18,7 @@ interface ManageRosterModalProps {
 
 /** Editor CRUD de la lista por defecto, persistida en LocalStorage. */
 export function ManageRosterModal({ open, onClose }: ManageRosterModalProps) {
+  const { t, tn } = useI18n();
   const defaultRoster = useVolleyStore((s) => s.defaultRoster);
   const addToDefault = useVolleyStore((s) => s.addToDefault);
   const updateDefaultEntry = useVolleyStore((s) => s.updateDefaultEntry);
@@ -50,7 +52,7 @@ export function ManageRosterModal({ open, onClose }: ManageRosterModalProps) {
   return (
     <Modal
       open={open}
-      title="Editar lista por defecto"
+      title={t('manage.title')}
       onClose={onClose}
       footer={
         <div className="flex items-center justify-between gap-3">
@@ -58,13 +60,13 @@ export function ManageRosterModal({ open, onClose }: ManageRosterModalProps) {
             onClick={resetDefaultToFactory}
             disabled={!isCustom}
             className="inline-flex items-center gap-1 text-xs font-semibold text-slate-500 hover:text-slate-700 disabled:opacity-40 dark:text-slate-400 dark:hover:text-slate-200"
-            title="Vuelve a la lista por defecto original"
+            title={t('manage.restoreTitle')}
           >
             <RotateCcw className="h-3.5 w-3.5" />
-            Restaurar lista por defecto
+            {t('manage.restore')}
           </button>
           <Button size="sm" onClick={onClose}>
-            Listo ({roster.length})
+            {t('manage.done')} ({roster.length})
           </Button>
         </div>
       }
@@ -81,7 +83,7 @@ export function ManageRosterModal({ open, onClose }: ManageRosterModalProps) {
                 handleAdd();
               }
             }}
-            placeholder="Nombre"
+            placeholder={t('manage.namePlaceholder')}
             maxLength={40}
             className="flex-1"
           />
@@ -89,12 +91,12 @@ export function ManageRosterModal({ open, onClose }: ManageRosterModalProps) {
             <Select
               value={level}
               onChange={(e) => setLevel(Number(e.target.value) as PlayerLevel)}
-              title={getLevel(level).label}
+              title={t(`level.${level}`)}
               accentClass={LEVEL_SELECT_CLASS[level]}
               className="font-semibold"
             >
               {LEVELS.map((l) => (
-                <option key={l.value} value={l.value} title={l.label}>
+                <option key={l.value} value={l.value} title={t(`level.${l.value}`)}>
                   {levelCode(l.value)}
                 </option>
               ))}
@@ -109,13 +111,13 @@ export function ManageRosterModal({ open, onClose }: ManageRosterModalProps) {
         {roster.length > 0 && (
           <div className="flex min-h-[28px] items-center justify-between">
             <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
-              {roster.length} {roster.length === 1 ? 'persona' : 'personas'}
+              {tn(roster.length, 'manage.count', { n: roster.length })}
             </span>
 
             {confirmClear ? (
               <div className="flex items-center gap-2">
                 <span className="text-xs font-semibold text-slate-600 dark:text-slate-300">
-                  ¿Vaciar la lista?
+                  {t('manage.confirmClear')}
                 </span>
                 <button
                   onClick={() => {
@@ -124,13 +126,13 @@ export function ManageRosterModal({ open, onClose }: ManageRosterModalProps) {
                   }}
                   className="rounded-lg bg-rose-600 px-2.5 py-1 text-xs font-bold text-white hover:bg-rose-700"
                 >
-                  Sí, vaciar
+                  {t('manage.yesClear')}
                 </button>
                 <button
                   onClick={() => setConfirmClear(false)}
                   className="text-xs font-semibold text-slate-500 hover:text-slate-700 dark:text-slate-400"
                 >
-                  Cancelar
+                  {t('common.cancel')}
                 </button>
               </div>
             ) : (
@@ -139,7 +141,7 @@ export function ManageRosterModal({ open, onClose }: ManageRosterModalProps) {
                 className="inline-flex items-center gap-1 text-xs font-semibold text-rose-500 hover:text-rose-600"
               >
                 <Trash2 className="h-3.5 w-3.5" />
-                Vaciar todo
+                {t('manage.clearAll')}
               </button>
             )}
           </div>
@@ -149,8 +151,8 @@ export function ManageRosterModal({ open, onClose }: ManageRosterModalProps) {
         {roster.length === 0 ? (
           <EmptyState
             icon={Users}
-            title="Lista vacía"
-            description="Agrega personas con el formulario de arriba o restaura la lista por defecto."
+            title={t('manage.empty.title')}
+            description={t('manage.empty.desc')}
           />
         ) : (
           <ul className="max-h-[50vh] space-y-1.5 overflow-y-auto">
@@ -175,12 +177,12 @@ export function ManageRosterModal({ open, onClose }: ManageRosterModalProps) {
                         level: Number(e.target.value) as PlayerLevel,
                       })
                     }
-                    title={getLevel(entry.level).label}
+                    title={t(`level.${entry.level}`)}
                     accentClass={LEVEL_SELECT_CLASS[entry.level]}
                     className="h-9 text-xs font-semibold"
                   >
                     {LEVELS.map((l) => (
-                      <option key={l.value} value={l.value} title={l.label}>
+                      <option key={l.value} value={l.value} title={t(`level.${l.value}`)}>
                         {levelCode(l.value)}
                       </option>
                     ))}
@@ -188,7 +190,7 @@ export function ManageRosterModal({ open, onClose }: ManageRosterModalProps) {
                 </div>
                 <button
                   onClick={() => removeFromDefault(i)}
-                  aria-label={`Quitar a ${entry.name}`}
+                  aria-label={t('manage.remove', { name: entry.name })}
                   className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-rose-50 hover:text-rose-600 dark:hover:bg-rose-950"
                 >
                   <Trash2 className="h-4 w-4" />

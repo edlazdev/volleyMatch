@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/Button';
 import { LevelBadge } from '@/components/ui/LevelBadge';
 import { parseRoster } from '@/utils/parseRoster';
 import type { RosterEntry } from '@/store/useVolleyStore';
+import { useI18n } from '@/i18n';
 
 interface ImportPlayersModalProps {
   open: boolean;
@@ -14,19 +15,13 @@ interface ImportPlayersModalProps {
   onImport: (entries: RosterEntry[]) => void;
 }
 
-const PLACEHOLDER = `Pega aquí tu lista (uno por línea). Ejemplos válidos:
-
-1. Juan Pérez 6
-2. Pedro Gómez - 5
-Carlos Ruiz (4)
-Ana Torres`;
-
 export function ImportPlayersModal({
   open,
   availableSlots,
   onClose,
   onImport,
 }: ImportPlayersModalProps) {
+  const { t, tn } = useI18n();
   const [text, setText] = useState('');
 
   const parsed = useMemo(() => parseRoster(text), [text]);
@@ -48,18 +43,21 @@ export function ImportPlayersModal({
   return (
     <Modal
       open={open}
-      title="Importar jugadores"
+      title={t('import.title')}
       onClose={handleClose}
       footer={
         <div className="flex items-center justify-between gap-3">
           <span className="text-xs text-slate-500 dark:text-slate-400">
             {parsed.length > 0
-              ? `${willImport.length} de ${parsed.length} se importarán`
-              : 'Sin jugadores detectados'}
+              ? t('import.willImport', {
+                  n: willImport.length,
+                  total: parsed.length,
+                })
+              : t('import.noneDetected')}
           </span>
           <div className="flex gap-2">
             <Button variant="ghost" size="sm" onClick={handleClose}>
-              Cancelar
+              {t('common.cancel')}
             </Button>
             <Button
               size="sm"
@@ -67,7 +65,7 @@ export function ImportPlayersModal({
               disabled={willImport.length === 0}
             >
               <ClipboardList className="h-4 w-4" />
-              Importar {willImport.length || ''}
+              {t('import.button')} {willImport.length || ''}
             </Button>
           </div>
         </div>
@@ -76,17 +74,13 @@ export function ImportPlayersModal({
       <div className="space-y-3">
         <div className="flex items-start gap-2 rounded-xl bg-brand-50 px-3 py-2.5 text-xs text-brand-700 dark:bg-brand-950/40 dark:text-brand-300">
           <Info className="mt-0.5 h-4 w-4 shrink-0" />
-          <span>
-            Copia la lista de tu grupo de WhatsApp y pégala. Detectamos el
-            nivel si aparece al final del nombre (1–6); si no, se asigna nivel 3
-            por defecto.
-          </span>
+          <span>{t('import.help')}</span>
         </div>
 
         <textarea
           value={text}
           onChange={(e) => setText(e.target.value)}
-          placeholder={PLACEHOLDER}
+          placeholder={t('import.placeholder')}
           rows={7}
           autoFocus
           className="w-full resize-y rounded-xl border border-slate-200 bg-white p-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/40 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 dark:placeholder:text-slate-500"
@@ -95,7 +89,7 @@ export function ImportPlayersModal({
         {parsed.length > 0 && (
           <div>
             <p className="mb-2 text-xs font-semibold text-slate-500 dark:text-slate-400">
-              Vista previa
+              {t('import.preview')}
             </p>
             <ul className="max-h-44 space-y-1 overflow-y-auto rounded-xl border border-slate-100 p-2 dark:border-slate-800">
               {parsed.map((p, i) => {
@@ -117,8 +111,10 @@ export function ImportPlayersModal({
             </ul>
             {overflow > 0 && (
               <p className="mt-2 text-xs text-amber-600 dark:text-amber-400">
-                {overflow} jugador(es) exceden el cupo disponible
-                ({availableSlots}) y no se importarán.
+                {tn(overflow, 'import.overflow', {
+                  n: overflow,
+                  slots: availableSlots,
+                })}
               </p>
             )}
           </div>

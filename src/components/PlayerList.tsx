@@ -1,8 +1,9 @@
 import { Trash2, Users } from 'lucide-react';
 import type { Player, PlayerLevel } from '@/types';
-import { LEVELS, LEVEL_SELECT_CLASS, getLevel, levelCode } from '@/data/levels';
+import { LEVELS, LEVEL_SELECT_CLASS, levelCode } from '@/data/levels';
 import { Select } from '@/components/ui/Select';
 import { EmptyState } from '@/components/ui/EmptyState';
+import { useI18n } from '@/i18n';
 
 interface PlayerListProps {
   players: Player[];
@@ -15,12 +16,13 @@ export function PlayerList({
   onRemove,
   onChangeLevel,
 }: PlayerListProps) {
+  const { t } = useI18n();
   if (players.length === 0) {
     return (
       <EmptyState
         icon={Users}
-        title="Aún no hay jugadores"
-        description="Agrega participantes con el formulario de arriba para empezar."
+        title={t('list.empty.title')}
+        description={t('list.empty.desc')}
       />
     );
   }
@@ -46,12 +48,16 @@ export function PlayerList({
               onChange={(e) =>
                 onChangeLevel(player.id, Number(e.target.value) as PlayerLevel)
               }
-              title={getLevel(player.level).label}
+              title={t(`level.${player.level}`)}
               accentClass={LEVEL_SELECT_CLASS[player.level]}
               className="h-9 text-xs font-semibold"
             >
               {LEVELS.map((lvl) => (
-                <option key={lvl.value} value={lvl.value} title={lvl.label}>
+                <option
+                  key={lvl.value}
+                  value={lvl.value}
+                  title={t(`level.${lvl.value}`)}
+                >
                   {levelCode(lvl.value)}
                 </option>
               ))}
@@ -60,7 +66,7 @@ export function PlayerList({
 
           <button
             onClick={() => onRemove(player.id)}
-            aria-label={`Eliminar a ${player.name}`}
+            aria-label={t('list.remove', { name: player.name })}
             className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-rose-50 hover:text-rose-600 dark:hover:bg-rose-950"
           >
             <Trash2 className="h-4 w-4" />

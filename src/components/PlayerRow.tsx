@@ -1,6 +1,7 @@
 import { ArrowLeftRight } from 'lucide-react';
 import type { Player } from '@/types';
 import { LevelBadge } from '@/components/ui/LevelBadge';
+import { useI18n } from '@/i18n';
 
 interface PlayerRowProps {
   player: Player;
@@ -10,6 +11,7 @@ interface PlayerRowProps {
 
 /** Fila de jugador dentro de un equipo (con botón de cambio). */
 export function PlayerRow({ player, onSwap }: PlayerRowProps) {
+  const { t } = useI18n();
   return (
     <div className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2.5 shadow-sm dark:border-slate-700 dark:bg-slate-950">
       <span className="min-w-0 flex-1 truncate text-sm font-medium text-slate-800 dark:text-slate-100">
@@ -20,8 +22,8 @@ export function PlayerRow({ player, onSwap }: PlayerRowProps) {
         <button
           type="button"
           onClick={onSwap}
-          aria-label={`Cambiar a ${player.name}`}
-          title="Cambiar o mover este jugador"
+          aria-label={t('team.swap', { name: player.name })}
+          title={t('team.swapTitle')}
           className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-brand-50 hover:text-brand-600 dark:hover:bg-brand-950/40 dark:hover:text-brand-300"
         >
           <ArrowLeftRight className="h-4 w-4" />

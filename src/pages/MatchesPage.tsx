@@ -7,14 +7,10 @@ import { BracketView } from '@/components/BracketView';
 import { Button } from '@/components/ui/Button';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { SegmentedControl } from '@/components/ui/SegmentedControl';
-import type { TournamentFormat } from '@/types';
-
-const FORMAT_OPTIONS: { value: TournamentFormat; label: string }[] = [
-  { value: 'round-robin', label: 'Todos contra todos' },
-  { value: 'knockout', label: 'Llaves (eliminación)' },
-];
+import { useI18n } from '@/i18n';
 
 export function MatchesPage() {
+  const { t, tn } = useI18n();
   const matches = useVolleyStore((s) => s.matches);
   const bracket = useVolleyStore((s) => s.bracket);
   const format = useVolleyStore((s) => s.format);
@@ -46,10 +42,12 @@ export function MatchesPage() {
     return (
       <EmptyState
         icon={Users}
-        title="No hay enfrentamientos"
-        description="Genera los equipos primero para calcular los partidos."
+        title={t('matches.empty.title')}
+        description={t('matches.empty.desc')}
         action={
-          <Button onClick={() => setScreen('config')}>Ir a configuración</Button>
+          <Button onClick={() => setScreen('config')}>
+            {t('teams.goConfig')}
+          </Button>
         }
       />
     );
@@ -62,12 +60,12 @@ export function MatchesPage() {
       <div className="flex items-center justify-between gap-3">
         <div>
           <h2 className="text-lg font-extrabold tracking-tight">
-            Enfrentamientos
+            {t('matches.title')}
           </h2>
           <p className="text-xs text-slate-500 dark:text-slate-400">
             {isKnockout
-              ? 'Llave de eliminación hasta la copa'
-              : `Todos contra todos · ${matches.length} ${matches.length === 1 ? 'partido' : 'partidos'}`}
+              ? t('matches.knockoutSub')
+              : tn(matches.length, 'matches.rrSub', { n: matches.length })}
           </p>
         </div>
         <span className="flex items-center gap-1.5 rounded-full bg-brand-50 px-3 py-1.5 text-xs font-bold text-brand-700 dark:bg-brand-950 dark:text-brand-300">
@@ -76,13 +74,16 @@ export function MatchesPage() {
           ) : (
             <Swords className="h-3.5 w-3.5" />
           )}
-          {teams.length} equipos
+          {t('matches.teamsBadge', { n: teams.length })}
         </span>
       </div>
 
       <SegmentedControl
         value={format}
-        options={FORMAT_OPTIONS}
+        options={[
+          { value: 'round-robin', label: t('matches.format.rr') },
+          { value: 'knockout', label: t('matches.format.ko') },
+        ]}
         onChange={setFormat}
       />
 
@@ -116,7 +117,7 @@ export function MatchesPage() {
           onClick={() => setScreen('teams')}
         >
           <Users className="h-5 w-5" />
-          Volver a equipos
+          {t('matches.back')}
         </Button>
       </div>
     </div>

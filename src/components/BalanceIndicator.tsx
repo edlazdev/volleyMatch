@@ -1,6 +1,7 @@
 import { CheckCircle2, Scale } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
 import { cn } from '@/utils/cn';
+import { useI18n } from '@/i18n';
 
 interface BalanceIndicatorProps {
   /** Diferencia de nivel total entre el equipo más fuerte y el más débil. */
@@ -9,34 +10,34 @@ interface BalanceIndicatorProps {
 
 /** Clasifica el equilibrio según el spread de nivel total. */
 function classify(spread: number): {
-  label: string;
+  labelKey: string;
   tone: string;
   bar: string;
   pct: number;
 } {
   if (spread <= 1)
     return {
-      label: 'Excelente equilibrio',
+      labelKey: 'balance.excellent',
       tone: 'text-emerald-600 dark:text-emerald-400',
       bar: 'bg-emerald-500',
       pct: 100,
     };
   if (spread <= 3)
     return {
-      label: 'Buen equilibrio',
+      labelKey: 'balance.good',
       tone: 'text-brand-600 dark:text-brand-400',
       bar: 'bg-brand-500',
       pct: 70,
     };
   if (spread <= 5)
     return {
-      label: 'Equilibrio moderado',
+      labelKey: 'balance.moderate',
       tone: 'text-amber-600 dark:text-amber-400',
       bar: 'bg-amber-500',
       pct: 45,
     };
   return {
-    label: 'Desequilibrado',
+    labelKey: 'balance.unbalanced',
     tone: 'text-rose-600 dark:text-rose-400',
     bar: 'bg-rose-500',
     pct: 20,
@@ -44,6 +45,7 @@ function classify(spread: number): {
 }
 
 export function BalanceIndicator({ spread }: BalanceIndicatorProps) {
+  const { t } = useI18n();
   const status = classify(spread);
   const perfect = spread === 0;
 
@@ -65,10 +67,10 @@ export function BalanceIndicator({ spread }: BalanceIndicatorProps) {
           </div>
           <div>
             <p className={cn('text-sm font-bold', status.tone)}>
-              {perfect ? 'Equipos perfectamente equilibrados' : status.label}
+              {perfect ? t('balance.perfect') : t(status.labelKey)}
             </p>
             <p className="text-xs text-slate-500 dark:text-slate-400">
-              Diferencia de nivel total:{' '}
+              {t('balance.diff')}{' '}
               <span className="font-semibold">{spread}</span>
             </p>
           </div>
