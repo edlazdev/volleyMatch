@@ -57,7 +57,7 @@ export function LandingPage() {
   return (
     <div className="space-y-14 animate-fade-in pb-8">
       {/* Hero */}
-      <section className="relative overflow-hidden rounded-3xl border border-slate-200 bg-gradient-to-br from-brand-600 to-sky-500 px-6 py-12 text-white shadow-glow dark:border-slate-800 sm:px-10 sm:py-14">
+      <section className="relative overflow-hidden rounded-3xl border border-slate-200 bg-gradient-to-br from-brand-700 via-brand-600 to-accent-500 px-6 py-12 text-white shadow-glow dark:border-slate-800 sm:px-10 sm:py-14">
         <div className="pointer-events-none absolute inset-0 opacity-20 [background-image:radial-gradient(circle_at_15%_15%,white,transparent_35%),radial-gradient(circle_at_85%_0%,white,transparent_30%)]" />
         <div className="relative grid items-center gap-8 lg:grid-cols-2">
           <div className="text-center lg:text-left">

@@ -8,8 +8,8 @@
       name="description"
       content="Genera equipos de vóley parejos por nivel, recibe sugerencias de cambio y arma torneos con llaves hasta la copa. Gratis, bilingüe y sin registro."
     />
-    <link rel="icon" type="image/svg+xml" href="/volleyball.svg" />
-    <meta name="theme-color" content="#327dff" />
+    <link rel="icon" type="image/webp" href="/logo_volley_match.webp" />
+    <meta name="theme-color" content="#2b46d6" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Volley Match — Equipos de vóley equilibrados" />
     <meta property="og:description" content="Equipos parejos por nivel, torneos y llaves hasta la copa." />
@@ -25,7 +25,8 @@
           extend: {
             fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
             colors: {
-              brand: { 50:'#eef6ff',100:'#d9eaff',300:'#8ec3ff',400:'#59a1ff',500:'#327dff',600:'#1b5cf5',700:'#1747e1',950:'#152357' },
+              brand: { 50:'#eff3ff',100:'#dbe4ff',300:'#93acff',400:'#6783fc',500:'#3f5cf0',600:'#2b46d6',700:'#2238b4',950:'#161d45' },
+              accent: { 50:'#fffbeb',100:'#fdf0c8',300:'#f9cd4f',400:'#f6ba26',500:'#f5b81e',600:'#d4920a',700:'#b06d0c' },
             },
           },
         },
@@ -41,9 +42,7 @@
     <header class="sticky top-0 z-20 border-b border-slate-200/70 bg-slate-50/80 backdrop-blur-lg">
       <nav class="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3">
         <div class="flex items-center gap-2.5">
-          <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-600 text-white">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
-          </span>
+          <img src="/logo_volley_match.webp" alt="" class="h-9 w-9 rounded-xl object-contain" />
           <span class="text-base font-extrabold tracking-tight">Volley<span class="text-brand-600">Match</span></span>
         </div>
         <div class="flex items-center gap-2">
@@ -55,7 +54,7 @@
 
     <main class="mx-auto max-w-5xl px-4">
       <!-- Hero -->
-      <section class="mt-8 overflow-hidden rounded-3xl bg-gradient-to-br from-brand-600 to-sky-500 px-6 py-14 text-center text-white sm:py-20">
+      <section class="mt-8 overflow-hidden rounded-3xl bg-gradient-to-br from-brand-700 via-brand-600 to-accent-500 px-6 py-14 text-center text-white sm:py-20">
         <span class="inline-flex rounded-full bg-white/20 px-3 py-1 text-xs font-bold backdrop-blur" data-i18n="hero.badge">🏐 Vóley · Equipos justos</span>
         <h1 class="mx-auto mt-4 max-w-2xl text-3xl font-extrabold leading-tight tracking-tight sm:text-5xl" data-i18n="hero.title">Forma equipos de vóley equilibrados en segundos</h1>
         <p class="mx-auto mt-4 max-w-xl text-sm text-white/90 sm:text-lg" data-i18n="hero.subtitle">Registra a los jugadores por nivel, genera equipos parejos automáticamente y arma tu torneo con llaves hasta la copa.</p>

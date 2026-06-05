@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { Dribbble, Github, Instagram } from 'lucide-react';
+import { Github, Instagram } from 'lucide-react';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { LanguageToggle } from '@/components/LanguageToggle';
 import { StepNav } from '@/components/StepNav';
@@ -28,9 +28,11 @@ export function AppLayout({ children }: AppLayoutProps) {
               className="flex items-center gap-2.5 rounded-xl text-left transition-opacity hover:opacity-80"
               aria-label={t('app.subtitle')}
             >
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-600 text-white shadow-glow">
-                <Dribbble className="h-5 w-5" />
-              </div>
+              <img
+                src="/logo_volley_match.webp"
+                alt=""
+                className="h-9 w-9 rounded-xl object-contain"
+              />
               <div className="leading-tight">
                 <h1 className="text-base font-extrabold tracking-tight">
                   Volley<span className="text-brand-600 dark:text-brand-400">Match</span>
